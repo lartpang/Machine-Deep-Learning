@@ -155,12 +155,12 @@ else:
 
 ![1536980936179](assets/1536980936179.png)
 
-> 这里对于均值求偏导数有问题，改正为：
+> 这里对于**均值求偏导数有问题**，改正为：
 > $$
 > \frac{\partial l}{\partial \mu_B}=\sum^m_{i=1}\frac{\partial l}{\partial \hat{x}_i}
-> \frac{-1}{\sqrt{\sigma^2_B+\epsilon}}+\frac{\partial l}{\partial \sigma^2}\frac{-2}{m}\cdot\sum^m_{i-1}(x_i-\mu_B)
+> \frac{-1}{\sqrt{\sigma^2_B+\epsilon}}+\frac{\partial l}{\partial \sigma^2}\frac{-2}{m}\cdot\sum^m_{i=1}(x_i-\mu_B)
 > $$
-> 因为有两条路径，分子分母都有$\mu_B$
+> 因为有两条路径，分子分母都有$\mu_B​$
 
 （上图中的$u$即是下图中的$\mu$）
 
