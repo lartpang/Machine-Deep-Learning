@@ -1,5 +1,3 @@
-
-
 # 综述
 
 ## 论文链接
@@ -32,7 +30,7 @@
 
 深度神经网络模型训练之难众所周知，其中一个重要的现象就是 Internal Covariate Shift. Batch Norm 大法自 2015 年由Google 提出之后，就成为深度学习必备之神器。自 BN 之后， Layer Norm / Weight Norm / Cosine Norm 等也横空出世。
 
-归一化层，目前主要有这几个方法，Batch Normalization（2015年）、Layer Normalization（2016年）、Instance Normalization（2017年）、Group Normalization（2018年）、Switchable Normalization（2018年）；
+归一化层，目前主要有这几个方法，Batch Normalization（2015年）、Layer Normalization（2016年）、Instance Normalization（2017年）、Group Normalization（2018年）、Switchable Normalization（2018年）
 
 将输入的图像shape记为`[N, C, H, W]`，这几个方法主要的区别就是在，
 
@@ -56,7 +54,7 @@
 >
 > 众所周知，深度网络中的数据维度一般是[N, C, H, W]或者[N, H, W, C]格式，N是batch size，H/W是feature的高/宽，C是feature的channel，压缩H/W至一个维度，其三维的表示如上图，假设单个方格的长度是1，那么其表示的是[6, 6，*, * ]
 >
->
+>要注意这里的channel不能单纯的理解为图形的RGB,对于卷积后的图像的特征图,也有所谓channel的概念,就是feature map的层数.所以可以不止三层.
 
 ## Batch Normalization
 
@@ -217,10 +215,10 @@ def GroupNorm(x, gamma, beta, G=16):
 
 本篇论文作者认为，
 
-* 第一，归一化虽然提高模型泛化能力，然而归一化层的操作是人工设计的。在实际应用中，解决不同的问题原则上需要设计不同的归一化操作，并没有一个通用的归一化方法能够解决所有应用问题；
-* 第二，一个深度神经网络往往包含几十个归一化层，通常这些归一化层都使用同样的归一化操作，因为手工为每一个归一化层设计操作需要进行大量的实验。
+* 第一，归一化虽然提高模型泛化能力，然而归一化层的操作是人工设计的。在实际应用中，解决不同的问题原则上需要设计不同的归一化操作，并**没有一个通用的归一化方法能够解决所有应用问题**；
+* 第二，一个深度神经网络往往包含几十个归一化层，通常**这些归一化层都使用同样的归一化操作**，因为手工为每一个归一化层设计操作需要进行大量的实验。
 
-因此作者提出自适配归一化方法——Switchable Normalization（SN）来解决上述问题。与强化学习不同，SN使用可微分学习，为一个深度网络中的每一个归一化层确定合适的归一化操作。
+因此作者提出**自适配归一化方法——Switchable Normalization（SN）**来解决上述问题。与强化学习不同，SN使用可微分学习，为一个深度网络中的每一个归一化层确定合适的归一化操作。
 
 ### 公式
 
@@ -287,7 +285,9 @@ def SwitchableNorm(x, gamma, beta, w_mean, w_var):
 
 ### 独立同分布与白化
 
-机器学习界的炼丹师们最喜欢的数据有什么特点？窃以为，莫过于“**独立同分布**”了，即*independent and identically distributed*，简称为 *i.i.d.* 独立同分布并非所有机器学习模型的必然要求（比如 Naive Bayes 模型就建立在特征彼此独立的基础之上，而Logistic Regression 和 神经网络 则在非独立的特征数据上依然可以训练出很好的模型），但独立同分布的数据可以简化常规机器学习模型的训练、提升机器学习模型的预测能力，已经是一个共识。
+机器学习界的炼丹师们最喜欢的数据有什么特点？窃以为，莫过于“**独立同分布**”了，即*independent and identically distributed*，简称为 *i.i.d.* 
+
+独立同分布并非所有机器学习模型的必然要求(比如 Naive Bayes 模型就建立在特征彼此独立的基础之上，而Logistic Regression 和 神经网络 则在非独立的特征数据上依然可以训练出很好的模型),但独立同分布的数据可以简化常规机器学习模型的训练、提升机器学习模型的预测能力，已经是一个共识。
 
 因此，在把数据喂给机器学习模型之前，“**白化（whitening）**”是一个重要的数据预处理步骤。白化一般包含两个目的：
 
@@ -328,7 +328,7 @@ Google 将这一现象总结为 Internal Covariate Shift，简称 ICS. 什么是
 
 通过某种运算后，输出一个标量值：![y=f(\bold{x})\\](https://www.zhihu.com/equation?tex=y%3Df%28%5Cbold%7Bx%7D%29%5C%5C)
 
-由于 ICS 问题的存在 ![\bold{x}](https://www.zhihu.com/equation?tex=%5Cbold%7Bx%7D) 的分布可能相差很大。要解决独立同分布的问题，“理论正确”的方法就是对每一层的数据都进行白化操作。然而标准的白化操作代价高昂，特别是我们还希望白化操作是可微的，保证白化操作可以通过反向传播来更新梯度。
+由于 ICS 问题的存在 ![\bold{x}](https://www.zhihu.com/equation?tex=%5Cbold%7Bx%7D) 的分布可能相差很大。要解决独立同分布的问题，<u>“理论正确”的方法就是对每一层的数据都进行白化操作。然而标准的白化操作代价高昂，特别是我们还希望白化操作是可微的，保证白化操作可以通过反向传播来更新梯度。</u>
 
 因此，以 BN 为代表的 Normalization 方法退而求其次，进行了简化的白化操作。基本思想是：在将 ![\bold{x}](https://www.zhihu.com/equation?tex=%5Cbold%7Bx%7D) 送给神经元之前，先对其做**平移和伸缩变换**， 将 ![\bold{x}](https://www.zhihu.com/equation?tex=%5Cbold%7Bx%7D) 的分布规范化成在固定区间范围的标准分布。
 

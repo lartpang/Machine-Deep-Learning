@@ -54,7 +54,7 @@
 
 你需要选取合适的 `epsilon`，使其能够在很大程度上过滤掉这条"长尾"，也就是说，选取的 `epsilon` 应大于大多数较小的、反映数据中噪声的特征值。 
 
-[![ZCA Eigenvalues Plot.png](http://ufldl.stanford.edu/wiki/images/9/91/ZCA_Eigenvalues_Plot.png)](http://ufldl.stanford.edu/wiki/index.php/File:ZCA_Eigenvalues_Plot.png) 
+![ZCA Eigenvalues Plot.png](http://ufldl.stanford.edu/wiki/images/9/91/ZCA_Eigenvalues_Plot.png)
 
 在基于重构的模型中，损失函数有一项是用于惩罚那些与原始输入数据差异较大的重构结果（**译注**：以自动编码机为例，要求输入数据经过编码和解码之后还能尽可能的还原输入数据）。
 
@@ -113,6 +113,12 @@ MNIST 数据集的像素值在 [0,255] 区间中。我们首先将其缩放到 [
 *注：也可选择以对 MNIST 进行 PCA/ZCA 白化，但这在实践中不常用。*
 
 ---
+
+## t-SNE(t-分布邻域嵌入)
+
+是一种更为强大复杂的非线性降维方法.
+
+![1537880152501](assets/1537880152501.png)
 
 ##  one hot 独热编码
 

@@ -1,6 +1,12 @@
 # 局部响应归一化
 
 > https://blog.csdn.net/sinat_21585785/article/details/75087768?utm_source=copy 
+>
+> https://blog.csdn.net/hduxiejun/article/details/70570086
+
+## 动机--侧抑制（lateral inhibition）
+
+![1538101998331](assets/1538101998331.png)
 
 ## 公式
 
