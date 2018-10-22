@@ -180,6 +180,8 @@ VGG通过反复堆叠3×3的小型卷积核和2×2的最大池化层，VGG成功
 
 ### 架构
 
+其中slim.conv2d默认的激活函数是relu.这个激活函数作用于输出的特征图.
+
 ```python
 net = slim.repeat(inputs, 2, slim.conv2d, 64, [3, 3], scope='conv1')
 net = slim.max_pool2d(net, [2, 2], scope='pool1')
@@ -214,6 +216,10 @@ if num_classes:
 ```
 
 ### 预处理
+
+> :question:
+>
+> 这里的关于随机翻转的预处理操作, slim 实现在训练里, 但是论文是说在测试里
 
 #### 训练
 
@@ -256,6 +262,8 @@ def preprocess_for_train(image,
 ```
 
 #### 测试
+
+相比训练阶段,只是少了随机翻转.
 
 ```python
 def preprocess_for_eval(image, output_height, output_width, resize_side):

@@ -2,7 +2,7 @@
 
 2012年，Alex Krizhevsky发表了[AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)，相对比LeNet它的网络层次更加深，从LeNet的5层到AlexNet的7层，更重要的是AlexNet还赢得了2012年的ImageNet竞赛的第一。AlexNet不仅比LeNet的神经网络层数更多更深，并且可以学习更复杂的图像高维特征。
 
-### AlexNet小结：
+## AlexNet小结：
 
 * 使用ReLU函数作为激活函数，降低了Sigmoid类函数的计算量
 * 利用dropout技术在训练期间选择性地剪掉某些神经元，避免模型过度拟合
@@ -11,7 +11,7 @@
 
 ![img](https://chenzomi12.github.io/2016/12/13/CNN-Architectures/alexnet.jpg)
 
-### 论文概要
+## 论文概要
 
 我们训练了一个最大的卷积神经网络来标记ILSVRC-2010 和 ILSVRC-2012比赛的数据集，并且实现了到目前为止在这些数据集上的最好结果。
 
@@ -27,7 +27,7 @@
 
 最后，网络的大小主要由当前GPU的可用内存数量和我们所能忍受的训练时间所限制。我们的网络在两块3G的GTX 580GPU上训练了五六天的时间。所有的实验表明，我们的结果还能通过更快的GPU和更大的可用数据集来进一步提高。
 
-### 预处理
+## 预处理
 
 ImageNet包含的图片分辨率是变化的，然而我们的系统需要的输入维数是一个常量。因此，我们采样这些图片一个固定的像素值256X256。给定一张矩形的图片，我们首先**重置这张图片的短边长度为256**，然后**从得到的图片中裁剪出中心的256X256**。除了**从每一个像素中减去平均值**外，我们没有做任何其他的操作。
 
@@ -35,9 +35,9 @@ ImageNet包含的图片分辨率是变化的，然而我们的系统需要的输
 
 所以，我们在像素的原始RGB值(**裁剪出的中心部分**)上训练我们的网络。
 
-### 新奇点
+## 新奇点
 
-#### 激活函数ReLU
+### 激活函数ReLU
 
 一般的方法是将神经元的输出作为函数$f(x)=tanh(x)$ 或$f(x)=(1+e^{-x})^{-1}$的输入x 。
 
@@ -51,7 +51,7 @@ ImageNet包含的图片分辨率是变化的，然而我们的系统需要的输
 
 然而，在训练Caltech-101数据集首要的问题是**防止过拟合**，所以他们所谓的“良好效果”与我们报告的通过使用Relus来获得**加速拟合**训练集能力的结果是不一样的。更快的学习对大数据集上的大模型有非常重大的影响。
 
-#### 多GPU处理
+### 多GPU处理
 
 采用的并行机制, 基本上每块GPU设置了一半的核函数(神经元)，一个额外的小技巧：GPU 的交流仅仅在某些层。意思是说，例如，第三层神经元的输入来自第二层的所有神经元。但是，第四层的神经元仅仅来自同一块GPU上第三层的神经元。选择这种连接方式对于交叉验证是一个问题，但是这允许我们精确地调整连接的数量直到计算数值是一个可以接受的值。
 
@@ -63,7 +63,7 @@ ImageNet包含的图片分辨率是变化的，然而我们的系统需要的输
 >
 > 在文中引用的“柱状”CNN from reference[5] *High-Performance Neural Networksfor Visual Object Classification*里没有直接提到independent column，但估计是指其GPU的implementation是相互独立的。另外一个推测依据是后文对two-GPU和one-GPU的描述，以及文中提到这是新颖的特征。
 
-#### 局部响应归一化
+### 局部响应归一化
 
 核函数的顺序在开始训练之前都是任意的而且是确定的。受真实神经元的启发，响应归一化的顺序实现了**单侧抑制**（lateral inhibition）的形式，**为使用不同核函数计算的神经元输出创造了竞争**。
 
@@ -129,16 +129,18 @@ with tf.Session() as sess:
 
 $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
-#### 重叠汇聚
+### 重叠汇聚
 
 在CNN中池化层汇总了同一个核函数下相邻神经元的输出。传统的，相邻池化单元并不重叠。为了更精确，一个池化层可以被认为是由相邻s个像素的池化网格所组成，每次汇总会汇聚池化单元中心像素的邻近zXz个单元。
 
 * 如果我们假设s=z，我们获得CNN中传统的局部池化。
 * 如果设s<z,我们获得重叠池化。
 
+> 这里的s就是汇聚操作的步长
+
 这是我们的网络里使用的参数，s=2, z=3。这个机制减小了top1错误率0.4%，top5错误率0.3%，和不重叠机制s=2,z=2比较起来,它**减小了等效面积的输出**。我们观察并发现，在训练有重叠池化的模型时, 不易过拟合。
 
-### 整体架构
+## 整体架构
 
 ![1537580096580](../assets/1537580096580.png)
 
@@ -173,9 +175,9 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
   > 上述原文是average across training cases of the log-probability of the correct label under the prediction distribution
   > 用公式表示为![argmax_{w}\left\{ \frac{1}{N} \sum_{}^{}{}-log\left( p(f(x,w) = y(x) ) \right)\right\} ](https://www.zhihu.com/equation?tex=argmax_%7Bw%7D%5Cleft%5C%7B+%5Cfrac%7B1%7D%7BN%7D+%5Csum_%7B%7D%5E%7B%7D%7B%7D-log%5Cleft%28+p%28f%28x%2Cw%29+%3D+y%28x%29+%29+%5Cright%29%5Cright%5C%7D+)
 
-### 防止过拟合的手段
+## 防止过拟合的手段
 
-#### Data Augmentation(数据扩充)
+### Data Augmentation(数据扩充)
 
 最简单也最常见的减少过拟合的方法就是通过**保留标签转换**人为地扩大数据集。我们运用两种数据增量方式，计算量都很小，所以转换得到的新图像不用存在硬盘中。我们的转换操作是在CPU上用python实现的，而GPU专门用于训练模型。所以实际训练中，数据增量操作对我们的CNN训练的总计算量没有影响。
 
@@ -191,7 +193,7 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
    通过该操作，我们CNN的Top1错误率降低了1个百分点。
 
-#### 随机失活
+### 随机失活
 
 结合多个不同模型的预测结果可以降低测试错误率，但对于本身就需要数天时间训练的大型神经网络而言，这是很奢侈的。然而，还是有很高效的方法**能够结合模型的预测结果**，而且只耗费大约两倍的训练时间。
 
@@ -199,7 +201,9 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 我们在图中的**前两个全连接层运用随机失活**。否则，神经网络训练就会出现很严重的过拟合。但**随机失活几乎使得模型收敛所需要的循环翻倍**。
 
-### 训练细节
+## 训练
+
+### 细节
 
 我们用随机梯度下降来训练模型，每一个批量有128个样本，动量为0.9，权值衰减为0.0005。我们发现小权值衰减对模型的训练是很重要的。也就是说，**权值衰减在模型中不单单起到正则化作用；它还协助降低模型的训练错误率**。
 
@@ -211,7 +215,7 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 所有的层级我们都使用相同的学习率，具体数值是我们在训练过程中不断调整得出的。主要调整方法是**每当模型在当前的学习率下验证错误率不再降低时，我们就把学习率除以10**。初始学习率是0.01，在完成训练过程中总共减少了三次。
 
-### 训练结果
+### 结果
 
 另一个探索神经网络视觉识别能力的方法是研究图像在最后一个层级，即维度为4096的隐含层上产生的特征激活状态（feature activation）（**译者注**：其实就是通过最后一个隐含层的输出结果）。
 
@@ -220,3 +224,93 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 也可以观察到，在**像素层面**上，返回的几张训练图像其实与第一列的测试图像的L2距离不是特别接近。
 
 计算4096维实向量之间的欧式距离是很低效的，但可以**通过训练一个自动编码器将向量压缩成较短的二进制码，**从而提高效率。这应该产生一个相比把自编码器直接应用到原始的像素上更好的图像检索方法.因为**直接计算像素而不使用其标签会使得计算偏向于在图像边缘寻找模式的相似性**，不管它们实际图片内容上是否相似。
+
+## 代码
+
+```python
+def alexnet_v2(inputs,
+               num_classes=1000,
+               is_training=True,
+               dropout_keep_prob=0.5,
+               spatial_squeeze=True,
+               scope='alexnet_v2',
+               global_pool=False):
+  """AlexNet version 2.
+
+  Described in: http://arxiv.org/pdf/1404.5997v2.pdf
+  Parameters from:
+  github.com/akrizhevsky/cuda-convnet2/blob/master/layers/
+  layers-imagenet-1gpu.cfg
+
+  Note: All the fully_connected layers have been transformed to conv2d layers.
+        To use in classification mode, resize input to 224x224 or set
+        global_pool=True. To use in fully convolutional mode, set
+        spatial_squeeze to false.
+        The LRN layers have been removed and change the initializers from
+        random_normal_initializer to xavier_initializer.
+
+  Args:
+    inputs: a tensor of size [batch_size, height, width, channels].
+    num_classes: the number of predicted classes. If 0 or None, the logits layer
+    is omitted and the input features to the logits layer are returned instead.
+    is_training: whether or not the model is being trained.
+    dropout_keep_prob: the probability that activations are kept in the dropout
+      layers during training.
+    spatial_squeeze: whether or not should squeeze the spatial dimensions of the
+      logits. Useful to remove unnecessary dimensions for classification.
+    scope: Optional scope for the variables.
+    global_pool: Optional boolean flag. If True, the input to the classification
+      layer is avgpooled to size 1x1, for any input size. (This is not part
+      of the original AlexNet.)
+
+  Returns:
+    net: the output of the logits layer (if num_classes is a non-zero integer),
+      or the non-dropped-out input to the logits layer (if num_classes is 0
+      or None).
+    end_points: a dict of tensors with intermediate activations.
+  """
+  with tf.variable_scope(scope, 'alexnet_v2', [inputs]) as sc:
+    end_points_collection = sc.original_name_scope + '_end_points'
+    # Collect outputs for conv2d, fully_connected and max_pool2d.
+    with slim.arg_scope([slim.conv2d, slim.fully_connected, slim.max_pool2d],
+                        outputs_collections=[end_points_collection]):
+      net = slim.conv2d(inputs, 64, [11, 11], 4, padding='VALID',
+                        scope='conv1')
+      net = slim.max_pool2d(net, [3, 3], 2, scope='pool1')
+      net = slim.conv2d(net, 192, [5, 5], scope='conv2')
+      net = slim.max_pool2d(net, [3, 3], 2, scope='pool2')
+      net = slim.conv2d(net, 384, [3, 3], scope='conv3')
+      net = slim.conv2d(net, 384, [3, 3], scope='conv4')
+      net = slim.conv2d(net, 256, [3, 3], scope='conv5')
+      net = slim.max_pool2d(net, [3, 3], 2, scope='pool5')
+
+      # Use conv2d instead of fully_connected layers.
+      with slim.arg_scope([slim.conv2d],
+                          weights_initializer=trunc_normal(0.005),
+                          biases_initializer=tf.constant_initializer(0.1)):
+        net = slim.conv2d(net, 4096, [5, 5], padding='VALID',
+                          scope='fc6')
+        net = slim.dropout(net, dropout_keep_prob, is_training=is_training,
+                           scope='dropout6')
+        net = slim.conv2d(net, 4096, [1, 1], scope='fc7')
+        # Convert end_points_collection into a end_point dict.
+        end_points = slim.utils.convert_collection_to_dict(
+            end_points_collection)
+        if global_pool:
+          net = tf.reduce_mean(net, [1, 2], keep_dims=True, name='global_pool')
+          end_points['global_pool'] = net
+        if num_classes:
+          net = slim.dropout(net, dropout_keep_prob, is_training=is_training,
+                             scope='dropout7')
+          net = slim.conv2d(net, num_classes, [1, 1],
+                            activation_fn=None,
+                            normalizer_fn=None,
+                            biases_initializer=tf.zeros_initializer(),
+                            scope='fc8')
+          if spatial_squeeze:
+            net = tf.squeeze(net, [1, 2], name='fc8/squeezed')
+          end_points[sc.name + '/fc8'] = net
+      return net, end_points
+alexnet_v2.default_image_size = 224
+```
+
