@@ -1,8 +1,8 @@
-# AlexNet
+# AlexNet(2012)
 
 2012年，Alex Krizhevsky发表了[AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)，相对比LeNet它的网络层次更加深，从LeNet的5层到AlexNet的7层，更重要的是AlexNet还赢得了2012年的ImageNet竞赛的第一。AlexNet不仅比LeNet的神经网络层数更多更深，并且可以学习更复杂的图像高维特征。
 
-## AlexNet小结：
+## 小结
 
 * 使用ReLU函数作为激活函数，降低了Sigmoid类函数的计算量
 * 利用dropout技术在训练期间选择性地剪掉某些神经元，避免模型过度拟合
@@ -179,11 +179,13 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 ### Data Augmentation(数据扩充)
 
-最简单也最常见的减少过拟合的方法就是通过**保留标签转换**人为地扩大数据集。我们运用两种数据增量方式，计算量都很小，所以转换得到的新图像不用存在硬盘中。我们的转换操作是在CPU上用python实现的，而GPU专门用于训练模型。所以实际训练中，数据增量操作对我们的CNN训练的总计算量没有影响。
+最简单也最常见的减少过拟合的方法就是通过**保留标签转换**人为地扩大数据集。
 
-1. 第一种数据增量方式是**图像变换和水平翻转**。具体操作是从原本大小为![256\times 256](https://www.zhihu.com/equation?tex=256%5Ctimes+256)的图象中提取所有大小为![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)的子图像（以及他们的水平翻转图像），然后将这些子图象作为我们CNN的输入图像。（这解释了为什么图二中我们模型的输入层的大小是![224 \times 224 \times 3](https://www.zhihu.com/equation?tex=224+%5Ctimes+224+%5Ctimes+3)）。经过如此操作，我们的训练数据集变为了原来的2048倍（ ![(256-224)^2\times2](https://www.zhihu.com/equation?tex=%28256-224%29%5E2%5Ctimes2) ）。虽然扩大后的数据之间的相关性非常大，但如果不这样操作，我们的网络会出现严重的过拟合现象，可能会迫使我们使用规模更小的网络。在测试的时候，模型对每个输入图像提取五个![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)子图像（四个角落和中心）以及他们分别的水平翻转图像（总共10个），通过softmax层进行预测，并将10个预测值平均。
+我们运用两种数据增量方式，计算量都很小，所以转换得到的新图像不用存在硬盘中。我们的转换操作是在CPU上用python实现的，而GPU专门用于训练模型。所以实际训练中，数据增量操作对我们的CNN训练的总计算量没有影响。
 
-2. 第二种方式是调整训练图像的RGB各颜色通道强度。具体操作是，对训练数据集所有图像的每个像素RGB值分别进行主成分分析（PCA）。然后将原本的图像加上(主成分特征向量)与(特征值)和(一个随机量的乘积)。也就是对于某图像的每一个像素![I_{xy} = \left[ I_{xy} ^{R},I_{xy} ^{G},I_{xy} ^{B}\right]](https://www.zhihu.com/equation?tex=I_%7Bxy%7D+%3D+%5Cleft%5B+I_%7Bxy%7D+%5E%7BR%7D%2CI_%7Bxy%7D+%5E%7BG%7D%2CI_%7Bxy%7D+%5E%7BB%7D%5Cright%5D)加上以下算式的结果：
+1. 第一种数据增量方式是**图像变换(随机剪裁)和水平翻转**。具体操作是从原本大小为![256\times 256](https://www.zhihu.com/equation?tex=256%5Ctimes+256)的图象中提取所有大小为![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)的子图像（以及他们的水平翻转图像），然后将这些子图象作为我们CNN的输入图像。（这解释了为什么图二中我们模型的输入层的大小是![224 \times 224 \times 3](https://www.zhihu.com/equation?tex=224+%5Ctimes+224+%5Ctimes+3)）。经过如此操作，我们的训练数据集变为了原来的2048倍（ ![(256-224)^2\times2](https://www.zhihu.com/equation?tex=%28256-224%29%5E2%5Ctimes2) ）。虽然扩大后的数据之间的相关性非常大，但如果不这样操作，我们的网络会出现严重的过拟合现象，可能会迫使我们使用规模更小的网络。在测试的时候，模型对每个输入图像提取五个![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)子图像（四个角落和中心）以及他们分别的水平翻转图像（总共10个），通过softmax层进行预测，并将10个预测值平均。
+
+2. 第二种方式是调整训练图像的RGB各颜色通道强度(光照变换)。具体操作是，对训练数据集所有图像的每个像素RGB值分别进行主成分分析（PCA）。然后将原本的图像加上(主成分特征向量)与(特征值)和(一个随机量的乘积)。也就是对于某图像的每一个像素![I_{xy} = \left[ I_{xy} ^{R},I_{xy} ^{G},I_{xy} ^{B}\right]](https://www.zhihu.com/equation?tex=I_%7Bxy%7D+%3D+%5Cleft%5B+I_%7Bxy%7D+%5E%7BR%7D%2CI_%7Bxy%7D+%5E%7BG%7D%2CI_%7Bxy%7D+%5E%7BB%7D%5Cright%5D)加上以下算式的结果：
 
    ![\[ \left[\textbf{p}_{1},\textbf{p}_{2},\textbf{p}_{3}\right]\left[\alpha _{1}\lambda _{1},\alpha _{2}\lambda _{2},\alpha _{3}\lambda _{3}\right]^{T} \]](https://www.zhihu.com/equation?tex=%5C%5B+%5Cleft%5B%5Ctextbf%7Bp%7D_%7B1%7D%2C%5Ctextbf%7Bp%7D_%7B2%7D%2C%5Ctextbf%7Bp%7D_%7B3%7D%5Cright%5D%5Cleft%5B%5Calpha+_%7B1%7D%5Clambda+_%7B1%7D%2C%5Calpha+_%7B2%7D%5Clambda+_%7B2%7D%2C%5Calpha+_%7B3%7D%5Clambda+_%7B3%7D%5Cright%5D%5E%7BT%7D+%5C%5D)
 
