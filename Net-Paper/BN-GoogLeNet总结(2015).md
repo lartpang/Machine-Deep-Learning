@@ -1,4 +1,4 @@
-# Inception V2
+# BN-GoogLeNet
 
 ## 前言
 
