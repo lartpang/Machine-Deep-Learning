@@ -99,7 +99,9 @@ $a^{i}_{(x,y)}$表示在这个输出结构(输出的feature map)中的一个位�
 
 论文公式中的**N表示通道数(channel)**。
 
-**$a,n/2,k,α,β​$分别表示函数中的input, depth_radius, bias, alpha, beta**，其中$n/2,k,α,β​$都是自定义的，特别注意一下$∑​$叠加的方向是沿着通道方向的，即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的，也就是**一个点同channel方向的前面n/2个通道（最小为第0个通道）和后n/2个通道（最大为第d-1个通道）的点的平方和(共n+1个点)**。
+**$a,n/2,k,α,β$分别表示函数中的input, depth_radius, bias, alpha, beta**，其中$n/2,k,α,β$都是自定义的，特别注意一下$∑$叠加的方向是沿着通道方向的，即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的，也就是**一个点同channel方向的前面n/2个通道（最小为第0个通道）和后n/2个通道（最大为第d-1个通道）的点的平方和(共n+1个点)**。
+
+> 这个公式作用的结果就是导致: 若是当前通道的值偏大, 那么就会相对的减弱相邻通道的值的大小. 大值会抑制相邻通道的结果.
 
 ![1537589241131](../assets/1537589241131.png)
 
@@ -219,7 +221,9 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 ### 细节
 
-我们用随机梯度下降来训练模型，每一个批量有128个样本，动量为0.9，权值衰减为0.0005。我们发现小权值衰减对模型的训练是很重要的。也就是说，**权值衰减在模型中不单单起到正则化作用；它还协助降低模型的训练错误率**。
+我们用随机梯度下降来训练模型，每一个批量有128个样本，动量为0.9，权值衰减为0.0005。
+
+我们发现小权值衰减对模型的训练是很重要的。也就是说，**权值衰减在模型中不单单起到正则化作用；它还协助降低模型的训练错误率**。
 
 权重的更新方法如下：![\begin{equation} v_{i+1} := 0.9\cdot v_{i}-0.0005\cdot\epsilon \cdot w_{i}-\epsilon\cdot\left< \frac{\partial L}{\partial w}|_{w_{i}} \right>_{D_{i}} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+v_%7Bi%2B1%7D+%3A%3D+0.9%5Ccdot+v_%7Bi%7D-0.0005%5Ccdot%5Cepsilon+%5Ccdot+w_%7Bi%7D-%5Cepsilon%5Ccdot%5Cleft%3C+%5Cfrac%7B%5Cpartial+L%7D%7B%5Cpartial+w%7D%7C_%7Bw_%7Bi%7D%7D+%5Cright%3E_%7BD_%7Bi%7D%7D+%5Cend%7Bequation%7D)![\begin{equation} w_{i+1} := w_i + v_{i+1} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+w_%7Bi%2B1%7D+%3A%3D+w_i+%2B+v_%7Bi%2B1%7D+%5Cend%7Bequation%7D)
 

@@ -2,6 +2,47 @@
 
 在cs231n笔记的基础上**进一步扩展**, 是我ML&DL学习总结的记录.
 
+---
+
+## 更新计划
+
+1. 论文
+    1. 2012
+        1. AlexNet-1
+    2. 2013
+        1. NiN-1
+    3. 2014
+        1. OverFeat-1
+        2. GoogLeNet-1
+        3. VGG-1
+    4. 2015
+        1. BN-GoogLeNet-1
+        2. InceptionV2/V3-1
+        3. ResNet-1
+        4. FCN-...([CVPR 2015 Best Paper])
+    5. 2016
+    6. 2017
+        1. SeNet-1
+    7. 2018
+
+2.other
+
+- Xception-0
+- InceptionV4-0
+- InceptionV5-0
+- ResNeXt-0
+- Mobile系列-0
+- FCN for Semantic Segmentation-0
+- Learning Deconvolution Network..(?)
+- DenseNet(?)
+- SqueezeNet(?)
+
+3. 调整文件结构
+
+其他补充
+
+---
+
 ## 关于CS231n笔记部分内容
 
 CS231n课程笔记的翻译，始于@杜客在一次回答问题“应该选择TensorFlow还是Theano？”中的机缘巧合，在取得了授权后申请了**知乎专栏智能单元 - 知乎专栏**独自翻译。随着翻译的进行，更多的知友参与进来。他们是@ShiqingFan，@猴子，@堃堃和@李艺颖。
