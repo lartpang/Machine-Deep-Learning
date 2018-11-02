@@ -99,7 +99,9 @@ $a^{i}_{(x,y)}$表示在这个输出结构(输出的feature map)中的一个位�
 
 论文公式中的**N表示通道数(channel)**。
 
-**$a,n/2,k,α,β​$分别表示函数中的input, depth_radius, bias, alpha, beta**，其中$n/2,k,α,β​$都是自定义的，特别注意一下$∑​$叠加的方向是沿着通道方向的，即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的，也就是**一个点同channel方向的前面n/2个通道（最小为第0个通道）和后n/2个通道（最大为第d-1个通道）的点的平方和(共n+1个点)**。
+**$a,n/2,k,α,β$分别表示函数中的input, depth_radius, bias, alpha, beta**，其中$n/2,k,α,β$都是自定义的，特别注意一下$∑$叠加的方向是沿着通道方向的，即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的，也就是**一个点同channel方向的前面n/2个通道（最小为第0个通道）和后n/2个通道（最大为第d-1个通道）的点的平方和(共n+1个点)**。
+
+> 这个公式作用的结果就是导致: 若是当前通道的值偏大, 那么就会相对的减弱相邻通道的值的大小. 大值会抑制相邻通道的结果.
 
 ![1537589241131](../assets/1537589241131.png)
 
@@ -139,6 +141,18 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 > 这里的s就是汇聚操作的步长
 
 这是我们的网络里使用的参数，s=2, z=3。这个机制减小了top1错误率0.4%，top5错误率0.3%，和不重叠机制s=2,z=2比较起来,它**减小了等效面积的输出**。我们观察并发现，在训练有重叠池化的模型时, 不易过拟合。
+
+### 分组卷积
+
+群卷积最早出现于AlexNet中。是为了解决显存不够的问题，将网络部署在两张GTX 580显卡上训练，Alex认为group conv的方式能够增加 filter之间的对角相关性，而且能够减少训练参数，不容易过拟合，这类似于正则的效果。
+
+我们假设上一层的输出feature map有N个，即通道数channel=N，也就是说上一层有N个卷积核。再假设群卷积的群数目M。那么该群卷积层的操作就是，先将channel分成M份。每一个group对应N/M个channel，与之独立连接。然后各个group卷积完成后将输出叠在一起（concatenate），作为这一层的输出channel。
+
+> https://blog.csdn.net/hhy_csdn/article/details/80030468 
+>
+> https://www.leiphone.com/news/201709/AzBc9Sg44fs57hyY.html
+>
+> [变形卷积核、可分离卷积？卷积神经网络中十大拍案叫绝的操作。 - 知乎](https://zhuanlan.zhihu.com/p/28749411)
 
 ## 整体架构
 
@@ -207,7 +221,9 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 ### 细节
 
-我们用随机梯度下降来训练模型，每一个批量有128个样本，动量为0.9，权值衰减为0.0005。我们发现小权值衰减对模型的训练是很重要的。也就是说，**权值衰减在模型中不单单起到正则化作用；它还协助降低模型的训练错误率**。
+我们用随机梯度下降来训练模型，每一个批量有128个样本，动量为0.9，权值衰减为0.0005。
+
+我们发现小权值衰减对模型的训练是很重要的。也就是说，**权值衰减在模型中不单单起到正则化作用；它还协助降低模型的训练错误率**。
 
 权重的更新方法如下：![\begin{equation} v_{i+1} := 0.9\cdot v_{i}-0.0005\cdot\epsilon \cdot w_{i}-\epsilon\cdot\left< \frac{\partial L}{\partial w}|_{w_{i}} \right>_{D_{i}} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+v_%7Bi%2B1%7D+%3A%3D+0.9%5Ccdot+v_%7Bi%7D-0.0005%5Ccdot%5Cepsilon+%5Ccdot+w_%7Bi%7D-%5Cepsilon%5Ccdot%5Cleft%3C+%5Cfrac%7B%5Cpartial+L%7D%7B%5Cpartial+w%7D%7C_%7Bw_%7Bi%7D%7D+%5Cright%3E_%7BD_%7Bi%7D%7D+%5Cend%7Bequation%7D)![\begin{equation} w_{i+1} := w_i + v_{i+1} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+w_%7Bi%2B1%7D+%3A%3D+w_i+%2B+v_%7Bi%2B1%7D+%5Cend%7Bequation%7D)
 
