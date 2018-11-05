@@ -19,7 +19,8 @@
         1. BN-GoogLeNet-1
         2. InceptionV2/V3-1
         3. ResNet-1
-        4. FCN-...([CVPR 2015 Best Paper])
+        4. FCN-1
+        5. Learning Deconvolution Network for Semantic Segmentation-0 
     5. 2016
     6. 2017
         1. SeNet-1
@@ -32,14 +33,13 @@
 - InceptionV5-0
 - ResNeXt-0
 - Mobile系列-0
-- FCN for Semantic Segmentation-0
 - Learning Deconvolution Network..(?)
 - DenseNet(?)
 - SqueezeNet(?)
 
 3. 调整文件结构
 
-其他补充
+**其他补充**
 
 ---
 
@@ -71,9 +71,13 @@ Linux新手，总是遇到各种问题，希望收集起来，可以作为一个
 
 ## 关于`Net-Paper`中的paper
 
-大多数是直接参考slim的代码和http://noahsnail.com博客内容
+大多数是直接参考slim的代码和http://noahsnail.com博客内容, 博客中没有的直接谷歌.
 
 > https://github.com/tensorflow/models/tree/master/research/slim
+>
+> "通天塔(有很多论文翻译, 虽然翻译的一般, 但是可以看)": http://tongtianta.site/
+>
+> https://arxiv.org/
 
 ---
 
