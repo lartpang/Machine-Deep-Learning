@@ -1,6 +1,6 @@
 
 
-# DenseNet
+# DenseNet(2017)
 
 我们提出了一个新的卷积网络架构，我们称之为密集卷积网络（DenseNet）。
 
