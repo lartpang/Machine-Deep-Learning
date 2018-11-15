@@ -4,6 +4,16 @@
 
 ---
 
+> changelog:
+>
+> 2018年11月15日: 
+>
+> 最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
+>
+> 希望可以帮助自己更深入的理解.
+
+---
+
 ## 更新计划
 
 1. 论文
@@ -20,22 +30,21 @@
         2. InceptionV2/V3-1
         3. ResNet-1
         4. FCN-1
-        5. Learning Deconvolution Network for Semantic Segmentation-0 
+        5. Learning Deconvolution Network for Semantic Segmentation-1
     5. 2016
     6. 2017
         1. SeNet-1
+        2. DenseNet-1
+        3. SqueezeNet(-1
     7. 2018
 
 2.other
 
 - Xception-0
 - InceptionV4-0
-- InceptionV5-0
+- Inception ResNet V1/V2-0
 - ResNeXt-0
 - Mobile系列-0
-- Learning Deconvolution Network..(?)
-- DenseNet(?)
-- SqueezeNet(?)
 
 3. 调整文件结构
 
