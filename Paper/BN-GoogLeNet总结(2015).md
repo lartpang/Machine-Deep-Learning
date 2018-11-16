@@ -1,4 +1,4 @@
-# BN-GoogLeNet(2015)
+# BN-Inception(2015)
 
 ## 前言
 
