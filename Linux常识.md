@@ -301,4 +301,32 @@ find . -size +1G | cat >> .gitignore
 
 **显存占用和GPU占用是两个不一样的东西**，显卡是由GPU和显存等组成的，显存和GPU的关系有点类似于内存和CPU的关系。
 
-  ---------------------  本文来自 天岚1993_量产机 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/sallyxyl1993/article/details/62220424?utm_source=copy 
+  ---------------------  本文来自 天岚1993_量产机 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/sallyxyl1993/article/details/62220424?utm_source=copy
+
+## Ubuntu&Win双系统时间调整问题
+
+在 Ubuntu 16.04 版本以前，关闭UTC的方法是编辑/etc/default/rcS，将UTC=yes改成UTC=no， 但在Ubuntu 16.04使用systemd启动之后，时间改成了由timedatectl来管理，所以更改方法是
+
+```sh
+timedatectl set-local-rtc 1 --adjust-system-clock
+```
+
+执行后重启Ubuntu，应该就没有问题了。
+
+2.修改 Windows对硬件时间的对待方式，让 Windows把硬件时间当作UTC.
+
+打开命令行程序，在命令行中输入下面命令并回车
+
+```bat
+Reg add HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation /v RealTimeIsUniversal /t REG_DWORD /d 1
+```
+
+应该就没有问题了。
+
+作者：滑稽
+
+链接：https://www.zhihu.com/question/46525639/answer/157272414
+
+来源：知乎
+
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 
