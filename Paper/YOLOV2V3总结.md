@@ -86,7 +86,7 @@ YOLO2是依赖于DarkNet-19的结构，这个模型在ImageNet上能达到91%的
 - 多尺度预测 （类FPN）
 - 更好的基础分类网络（类ResNet）和分类器
 
-> Loss不同：将YOLO V3替换了V2中的Softmax loss变成Logistic loss，而且每个GT只匹配一个先验框； 
+> Loss不同：将YOLO V3替换了V2中的Softmax loss变成Logistic loss，而且每个GT只匹配一个先验框；
 >
 > Anchor bbox prior不同：V2用了5个anchor，V3用了9个anchor，提高了IOU；
 >
