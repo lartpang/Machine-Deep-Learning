@@ -169,7 +169,7 @@ dpkg -L
 
 1. 查看系统已经安装的内核版本
 
-   > dpkg –-get-selections | grep linux-image
+   > dpkg --get-selections | grep linux-image
 
    ![1538810012623](assets/1538810012623.png)
 
