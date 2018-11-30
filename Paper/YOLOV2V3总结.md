@@ -2,6 +2,8 @@
 
 ## YOLOV2
 
+> https://arxiv.org/abs/1612.08242
+
 YOLO与Fast R-CNN相比有较大的定位误差，与基于region proposal的方法相比具有较低的召回率。因此YOLO v2主要改进是提高召回率和定位能力。
 
 论文主要工作有两部分：
@@ -80,6 +82,8 @@ YOLO2是依赖于DarkNet-19的结构，这个模型在ImageNet上能达到91%的
 采用这种联合训练，YOLO9000从COCO检测数据集中学习如何在图片中寻找物体，从ImageNet数据集中学习更广泛的物体分类。
 
 ## YOLOV3
+
+> https://arxiv.org/abs/1804.02767
 
 ### 改进之处
 

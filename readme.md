@@ -2,69 +2,82 @@
 
 在cs231n笔记的基础上**进一步扩展**, 是我ML&DL学习总结的记录.
 
----
+<details>
+<summary> changelog</summary>
 
-> changelog:
->
-> 2018年11月15日: 
->
-> 最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
->
-> 希望可以帮助自己更深入的理解.
->
-> 2018年11月19日:
->
-> 准备开始看Yolo/SSD系列.
->
-> 这几天看完了RCNN系列的文章, 略感心累.
->
-> 准备过些日子重新在整理下文档结构吧.
+2018年11月15日: 
 
----
+最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
 
-## 更新计划(成文-1/未动手-0)
+希望可以帮助自己更深入的理解.
 
-1. 论文
-    1. 2012
-        1. AlexNet-1
-    2. 2013
-        1. NiN-1
-    3. 2014
-        1. OverFeat-1
-        2. GoogLeNet-1
-        3. VGG-1
-        4. R-CNN-1
-        5. SPP-Net-1
-    4. 2015
-        1. BN-GoogLeNet-1
-        2. InceptionV2/V3-1
-        3. ResNet-1
-        4. FCN-1
-        5. Deconvolution Network(Semantic Segmentation)-1
-        6. Fast R-CNN-1
-        7. YOLO-V1-1
-    5. 2016
-        1. Faster R-CNN-1
-    6. 2017
-        1. SeNet-1
-        2. DenseNet-1
-        3. SqueezeNet-1
-    7. 2018
+2018年11月19日:
 
-2.other
+准备开始看Yolo/SSD系列.
+
+这几天看完了RCNN系列的文章, 略感心累.
+
+准备过些日子重新在整理下文档结构吧.
+
+2018年11月30日:
+
+看完了RCNN系列, 看完了SSD&Faster的实现, YOLO简单过了一下, 接下来准备看下其他的关于目标检测算法论文.
+
+</details>
+
+<details>
+<summary>已读论文</summary>
+
+1. 2012
+    1. AlexNet
+2. 2013
+    1. NiN
+3. 2014
+    1. OverFeat
+    2. GoogLeNet
+    3. VGG
+    4. R-CNN
+    5. SPP-Net
+4. 2015
+    1. BN-GoogLeNet
+    2. InceptionV2/V3
+    3. ResNet
+    4. FCN
+    5. Deconvolution Network(Semantic Segmentation)
+    6. Fast R-CNN
+    7. YOLO-V1
+    8. SSD
+5. 2016
+    1. Faster R-CNN
+    2. YOLO-V2
+6. 2017
+    1. SeNet
+    2. DenseNet
+    3. SqueezeNet
+7. 2018
+    1. YOLO-V3
+
+</details>
+
+<details>
+<summary>未读论文</summary>
 
 - Xception-0
 - InceptionV4-0
 - Inception ResNet V1/V2-0
 - ResNeXt-0
 - Mobile系列-0
-- SSD-0
 - RetinaNet-0
 
-3. 调整文件结构
-    1. 基础文章收集到一起
-    2. 论文部分进行一下分类归档
-    3. 删除文章未使用的图片
+</details>
+
+## 后期想法
+
+调整文件结构
+
+1. 基础文章收集到一起
+2. 论文部分进行一下分类归档
+3. 删除文章未使用的图片
 
 ---
 
