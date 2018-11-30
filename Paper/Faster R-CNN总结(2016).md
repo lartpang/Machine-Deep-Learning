@@ -9,6 +9,8 @@
 > * https://senitco.github.io/2017/09/02/faster-rcnn/
 > * https://www.cnblogs.com/guoyaohua/p/9488119.html
 > * https://tryolabs.com/blog/2018/01/18/faster-r-cnn-down-the-rabbit-hole-of-modern-object-detection/
+>
+> luminoth代码注释: https://github.com/lartpang/luminoth/tree/master/luminoth/models/fasterrcnn
 
 ## 网络结构
 
@@ -59,21 +61,122 @@ RPN的作用就是代替了Fast RCNN的Selective search，但是速度更快.
 ### RPN的处理流程
 
 1. 对于RPN网络，先采用一个CNN模型（一般称为特征提取器）接收整张图片并提取特征图
+
 2. 然后在这个特征图上采用一个N\*N（文中是3\*3）的滑动窗口，对于每个滑窗位置都映射一个低维度的特征（如256-d）
+
 3. 然后这个特征分别送入两个全连接层，一个用于分类预测，另外一个用于回归, 继而计算得到特征图conv5-3映射到输入图像的所有anchors，并通过RPN网络前向计算得到**anchors的score输出和bbox回归参数**
+
+    > ```python
+    > prediction_dict = {}
+    > 
+    > # Get the RPN feature using a simple conv net. Activation function
+    > # can be set to empty.
+    > # 得到第一个3x3卷积的结果, 后加了个ReLU激活函数
+    > rpn_conv_feature = self._rpn(conv_feature_map)
+    > rpn_feature = self._rpn_activation(rpn_conv_feature)
+    > 
+    > # Then we apply separate conv layers for classification and regression.
+    > # 获得类别得分和边界框预测, 这里各自只是经过了一次1x1的卷积, 就直接得到结果.
+    > rpn_cls_score_original = self._rpn_cls(rpn_feature)
+    > rpn_bbox_pred_original = self._rpn_bbox(rpn_feature)
+    > # rpn_cls_score_original has shape (1, H, W, num_anchors * 2)
+    > # rpn_bbox_pred_original has shape (1, H, W, num_anchors * 4)
+    > # where H, W are height and width of the pretrained feature map.
+    > # 因为使用的是3x3 padding=1 以及 1x1的卷积, 所以宽高不变, 而且这里也不能变,
+    > # 因为还要与原始的特征图所对应
+    > 
+    > # Convert (flatten) `rpn_cls_score_original` which has two scalars per
+    > # anchor per location to be able to apply softmax.
+    > # 这里的操作是实现了一个flatten的操作, 但是对于每个anchor都有对应的两个值
+    > # 也就是前景和背景的概率(目标/非目标)
+    > rpn_cls_score = tf.reshape(rpn_cls_score_original, [-1, 2])
+    > # Now that `rpn_cls_score` has shape (H * W * num_anchors, 2), we apply
+    > # softmax to the last dim.
+    > # 对每个anchors应用一个softmax分类器得到类别预测
+    > rpn_cls_prob = tf.nn.softmax(rpn_cls_score)
+    > 
+    > # 数据存档
+    > prediction_dict['rpn_cls_prob'] = rpn_cls_prob
+    > prediction_dict['rpn_cls_score'] = rpn_cls_score
+    > 
+    > # 与上面类似的操作, 进行了把各个anchor全部展开
+    > # Flatten bounding box delta prediction for easy manipulation.
+    > # We end up with `rpn_bbox_pred` having shape (H * W * num_anchors, 4).
+    > rpn_bbox_pred = tf.reshape(rpn_bbox_pred_original, [-1, 4])
+    > 
+    > # 数据存档
+    > prediction_dict['rpn_bbox_pred'] = rpn_bbox_pred
+    > ```
+
 4. 由anchors坐标和bbox回归参数计算得到预测框proposal的坐标
+
 5. 处理proposal坐标超出图像边界的情况(使得坐标最小值为0，最大值为宽或高)
+
 6. 滤除掉尺寸(宽高)小于给定阈值的proposal
+
 7. 对剩下的proposal按照目标得分(fg score)从大到小排序，提取前pre_nms_topN(e.g. 6000)个proposal
+
 8. 对提取的proposal进行非极大值抑制(non-maximum suppression,nms)，再根据nms后的foreground score，筛选前post_nms_topN(e.g. 300)个proposal作为RPN最后的输出
+
+    > ```python
+    > # We have to convert bbox deltas to usable bounding boxes and remove
+    > # redundant ones using Non Maximum Suppression (NMS).
+    > # 将bbox增量转换为可用的边界框并使用NMS删除冗余
+    > # 这些操作都在self._proposal中实现了, 输出来的就是调整处理后的山下来的结果
+    > proposal_prediction = self._proposal(
+    >     rpn_cls_prob, rpn_bbox_pred, all_anchors, im_shape)
+    > 
+    > # 数据存档	
+    > prediction_dict['proposals'] = proposal_prediction['proposals']
+    > prediction_dict['scores'] = proposal_prediction['scores']
+    > ```
 
 ### RPN的结构
 
 对于每个窗口位置一般设置k个不同大小或比例的先验框（anchors, default bounding boxes），这意味着**每个位置预测$k$个候选区域**（region proposals）
 
+```python
+# 3x3的卷基层
+self._rpn = Conv2D(
+    output_channels=self._num_channels,
+    kernel_shape=self._kernel_shape,
+    initializers={'w': self._rpn_initializer},
+    regularizers={'w': self._regularizer},
+    name='conv'
+)
+
+...
+
+rpn_conv_feature = self._rpn(conv_feature_map)
+rpn_feature = self._rpn_activation(rpn_conv_feature)
+```
+
 对于**分类层，其输出大小是2k**，我们对每个锚点输出**两个预测值：它是背景（不是目标）的分数，和它是前景（实际的目标）的分数。**
 
+```
+# 分类分支, 输出的通道数目是 2k(k即为anchors数目)
+self._rpn_cls = Conv2D(
+    output_channels=self._num_anchors * 2, kernel_shape=[1, 1],
+    initializers={'w': self._cls_initializer},
+    regularizers={'w': self._regularizer},
+    padding='VALID',
+    name='cls_conv'
+)
+```
+
 而**回归层输出4k**个坐标值，对于回归或边框调整层，我们输出**四个预测值：Δxcenter、Δycenter、Δwidth、Δheight，我们将会把这些值用到锚点中来得到最终的建议。**
+
+```python
+# BBox prediction is 4 values * number of anchors.
+# 预测分支, 输出通道数目为 4k
+self._rpn_bbox = Conv2D(
+    output_channels=self._num_anchors * 4, kernel_shape=[1, 1],
+    initializers={'w': self._bbox_initializer},
+    regularizers={'w': self._regularizer},
+    padding='VALID',
+    name='bbox_conv'
+)
+```
 
 RPN 是用完全卷积的方式高效实现的，用基础网络返回的卷积特征图作为输入。**首先，我们使用一个有 512 个通道和 3x3 卷积核大小的卷积层，然后我们有两个使用 1x1 卷积核的并行卷积层，其通道数量取决于每个点的锚点数量。**
 
@@ -277,25 +380,6 @@ $$
 考虑整个特征图conv5-3，则输出大小为$W \times H \times 18​$，正好对应conv5-3上每个点有9个anchors，而每个anchor又有两个score(fg/bg)输出.
 
 对于*单个anchor训练样本*，其实是一个二分类问题。
-
-流程中, 有个比价重要的`reshape`操作.
-
-* 为了便于Softmax分类，需要**对分类层执行reshape操作**，这也是由底层数据结构决定的。在caffe中，Blob的数据存储形式为Blob=[batch\_size,channel,height,width]. 而对于分类层(cls)，其在Blob中的实际存储形式为[1,2k,H,W].
-
-* 而Softmax针对每个anchor进行二分类，所以需要在分类层前面增加一个reshape layer，将数据组织形式变换为[1,2,k*H,W]
-
-    > 对HxW大小的特征图上的像素所对应的HxWx18个anchors(k=9)进行分类操作, 这里的输入数据格式为[1, 18, H, W], 而对于每个anchor都要进行一次二分类, 所以得到的应该变形为[1, 2, 9xH, W]
-
-* 之后再reshape回原来的结构
-
-> caffe中有对softmax_loss_layer.cpp的reshape函数做如下解释：
->
-> ```cpp
-> "Number of labels must match number of predictions; "  
-> "e.g., if softmax axis == 1 and prediction shape is (N, C, H, W), "  
-> "label count (number of labels) must be N*H*W, "  
-> "with integer values in {0, 1, ..., C-1}.";
-> ```
 
 **Bounding Box Regression**
 
