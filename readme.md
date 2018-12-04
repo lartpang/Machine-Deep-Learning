@@ -2,28 +2,33 @@
 
 在cs231n笔记的基础上**进一步扩展**, 是我ML&DL学习总结的记录.
 
-<details>
-<summary> changelog</summary>
+## changelog
 
-2018年11月15日: 
+* 2018年11月15日:
 
-最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
+    最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
 
-希望可以帮助自己更深入的理解.
+    希望可以帮助自己更深入的理解.
 
-2018年11月19日:
+* 2018年11月19日:
 
-准备开始看Yolo/SSD系列.
+    准备开始看Yolo/SSD系列.
 
-这几天看完了RCNN系列的文章, 略感心累.
+    这几天看完了RCNN系列的文章, 略感心累.
 
-准备过些日子重新在整理下文档结构吧.
+    准备过些日子重新在整理下文档结构吧.
 
-2018年11月30日:
+* 2018年11月30日:
 
-看完了RCNN系列, 看完了SSD&Faster的实现, YOLO简单过了一下, 接下来准备看下其他的关于目标检测算法论文.
+    看完了RCNN系列, 看完了SSD&Faster的实现, YOLO简单过了一下, 接下来准备看下其他的关于目标检测算法论文.
 
-</details>
+* 2018年12月04日:
+
+    看完了RFCN, 可变形卷积, FPN, 再往后就是mask-rcnn等更为牛逼的网络了, 可是自我感觉, 到目前来说, 或许应该暂停下了, 准备开始复现代码了.
+
+    编程能力是基石, 不可缺少, 这个不稳, 一切都不靠谱, 需要上手练练了, 之前只是看了下Faster/SSD的代码, 其他就没有详细读过了, 感觉应该仔细学习下tensorflow, 先从Cifar10的分类网络练手吧!
+
+    后续的代码的提交, 会在另一个仓库里更新
 
 <details>
 <summary>已读论文</summary>
@@ -39,35 +44,29 @@
     4. R-CNN
     5. SPP-Net
 4. 2015
-    1. BN-GoogLeNet
-    2. InceptionV2/V3
-    3. ResNet
-    4. FCN
-    5. Deconvolution Network(Semantic Segmentation)
-    6. Fast R-CNN
-    7. YOLO-V1
-    8. SSD
+    1. 深度学习综述(三巨头, 简单看了下)
+    2. BN-GoogLeNet
+    3. InceptionV2/V3
+    4. ResNet
+    5. FCN
+    6. Deconvolution Network(Semantic Segmentation)
+    7. Fast R-CNN
+    8. YOLO-V1
+    9. SSD
+    10. HED(简单看了下)
+    11. STN(简单看了下, 为了进一步了解可变形卷积)
 5. 2016
     1. Faster R-CNN
-    2. YOLO-V2
+    2. YOLO-V2(简单看了下改进)
+    3. FPN
+    4. R-FCN
 6. 2017
     1. SeNet
     2. DenseNet
     3. SqueezeNet
+    4. Deformable ConvNet
 7. 2018
-    1. YOLO-V3
-
-</details>
-
-<details>
-<summary>未读论文</summary>
-
-- Xception-0
-- InceptionV4-0
-- Inception ResNet V1/V2-0
-- ResNeXt-0
-- Mobile系列-0
-- RetinaNet-0
+    1. YOLO-V3(简单看了下改进)
 
 </details>
 
@@ -78,10 +77,12 @@
 1. 基础文章收集到一起
 2. 论文部分进行一下分类归档
 3. 删除文章未使用的图片
+4. 复现分类网络
 
 ---
 
-## 关于CS231n笔记部分内容
+<details>
+<summary> 关于CS231n笔记部分内容 </summary>
 
 CS231n课程笔记的翻译，始于@杜客在一次回答问题“应该选择TensorFlow还是Theano？”中的机缘巧合，在取得了授权后申请了**知乎专栏智能单元 - 知乎专栏**独自翻译。随着翻译的进行，更多的知友参与进来。他们是@ShiqingFan，@猴子，@堃堃和@李艺颖。
 
@@ -96,6 +97,8 @@ CS231n课程笔记的翻译，始于@杜客在一次回答问题“应该选择T
 @李艺颖：当你真正沉下心来要做一件事情的时候才是学习和提高最好的状态；当你有热情做事时，并不会觉得是在牺牲时间，因为那是有意义并能带给你成就感和充实感的；不需要太过刻意地在乎大牛的巨大光芒，你只需像傻瓜一样坚持下去就好了，也许回头一看，你已前进了很多。就像老杜说的，我们就是每一步慢慢走，怎么就“零星”地把这件事给搞完了呢？
 
 @杜客：做了一点微小的工作，哈哈。
+
+</details>
 
 > 感谢对于CS231n的笔记的翻译。
 
