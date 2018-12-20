@@ -12,13 +12,13 @@
 
 ![1544517707402](assets/1544517707402.png)
 
-在本文中，我们关注*如何有效地利用图像中丰富的依赖关系并介绍密集的RNN模块*。
+在本文中，我们关注*如何有效地利用图像中丰富的依赖关系并介绍密集的RNN模块*.
 
-我们的方法与先前的RNN方法（例如，DAG结构的RNN和线性结构的RNN或LSTM）不同，其中每个图像单元仅接收来自其有限邻居的依赖性信息并考虑丢弃了有用的依赖关系。
+我们的方法与先前的RNN方法（例如，DAG结构的RNN和线性结构的RNN或LSTM）不同，其中每个图像单元仅接收来自其有限邻居的依赖性信息并考虑丢弃了有用的依赖关系.
 
-相反，我们建议**在RNN中添加密集路径**以实现直接的远程依赖。因此，每个图像单元可以直接“看到”整个图像中的依赖性，从而导致更具辨别力的表示。值得注意的是，密集连接的概念不仅可以用于图形RNN，而且可以很容易地应用于其他线性结构化RNN。
+相反，我们建议**在RNN中添加密集路径**以实现直接的远程依赖. 因此，每个图像单元可以直接“看到”整个图像中的依赖性，从而导致更具辨别力的表示. 值得注意的是，密集连接的概念不仅可以用于图形RNN，而且可以很容易地应用于其他线性结构化RNN.
 
-此外，我们**将注意力模型引入密集RNN**。据我们所知，这项工作首先在RNN中使用注意机制进行场景解析。我们的注意力模型自动从密集连接中选择图像单元相关的并且约束相关依赖关系，进一步提高其可辨识性。
+此外，我们**将注意力模型引入密集RNN**. 据我们所知，这项工作首先在RNN中使用注意机制进行场景解析. 我们的注意力模型自动从密集连接中选择图像单元相关的并且约束相关依赖关系，进一步提高其可辨识性.
 
 ![1544518004394](assets/1544518004394.png)
 
@@ -58,19 +58,19 @@ DD-RNN被用来对于CNN最后的输出图像单元之间的依赖进行建模.
 
 网络使用512x512大小的输入, 输出标签结果也要使用相同的分辨率. 评估的时候, 输出的标签结果要放缩到原始输入的大小.
 
-DD-RNN的输入层, 隐藏层, 输出层, 单元数目都设定为512. 这里的两个非线性函数使用ReLU和softmax函数. 整个网络端到端的使用标准SGD方法来进行训练. 
+DD-RNN的输入层, 隐藏层, 输出层, 单元数目都设定为512. 这里的两个非线性函数使用ReLU和softmax函数. 整个网络端到端的使用标准SGD方法来进行训练.
 
-对于全卷积模块, 学习率被初始化为0.0001, 以10周期, 0.9的倍率进行指数衰减. 
+对于全卷积模块, 学习率被初始化为0.0001, 以10周期, 0.9的倍率进行指数衰减.
 
-对于 D-RNN, 学习率初始化为0.01, 并且10周期0.9倍率进行衰减. 训练和测试的批处理大小都设定为1.在50个训练周期后, 汇报了结果. 
+对于 D-RNN, 学习率初始化为0.01, 并且10周期0.9倍率进行衰减. 训练和测试的批处理大小都设定为1.在50个训练周期后, 汇报了结果.
 
 这个网络使用了MatConvNet在Matlab中实现, 使用单显卡(12G).
 
-Datasets: We test our method on the large-scale PASCAL Context [38], MIT ADE20K [59] and Cityscapes [11]. 
+Datasets: We test our method on the large-scale PASCAL Context [38], MIT ADE20K [59] and Cityscapes [11].
 
-- The PASCAL Context contains **10,103 images annotated into 540 classes**, where **4,998 images are used for training and the rest for testing**. Similar to other literatures, we only consider **the most frequent 59 classes for evaluation**. 
+- The PASCAL Context contains **10,103 images annotated into 540 classes**, where **4,998 images are used for training and the rest for testing**. Similar to other literatures, we only consider **the most frequent 59 classes for evaluation**.
 - The recent MIT ADE20K consists of **20,000 images in training set and 2,000 images in validation set**.  There are **total 150 semantics classes** in the dataset.
-- The  Cityscapes  contains  **5000  images**  of  street  traffic scene, where **2975 images are used for training, 500 images for validation, and the rest for testing.**  In total, **19 classes are considered for training and evaluation.** 
+- The  Cityscapes  contains  **5000  images**  of  street  traffic scene, where **2975 images are used for training, 500 images for validation, and the rest for testing.**  In total, **19 classes are considered for training and evaluation.**
 
 评估的时候, 使用的是mIoU指标.
 
@@ -80,7 +80,7 @@ Datasets: We test our method on the large-scale PASCAL Context [38], MIT ADE20K 
 
 ![1544526966350](assets/1544526966350.png)
 
-用于比较的模型: 
+用于比较的模型:
 
 * Baseline FCN: 类似于FCN-8s, 但是移除了全连接层.
 * FCN+CRF: 在基线模型熵进行了CRF后处理
@@ -93,11 +93,11 @@ Datasets: We test our method on the large-scale PASCAL Context [38], MIT ADE20K 
 
 ![1544527162950](assets/1544527162950.png)
 
-受益于DNN，FCN-8s取得了令人满意的结果，其中mIoU为38.2％。**为了缓解FCN-8中的边界问题，CRF-RNN和DeepLab v2-CRF在CNN中使用CRF等概率图模型**，并分别获得39.3％和39.6％的mIoUs。
+受益于DNN，FCN-8s取得了令人满意的结果，其中mIoU为38.2％. **为了缓解FCN-8中的边界问题，CRF-RNN和DeepLab v2-CRF在CNN中使用CRF等概率图模型**，并分别获得39.3％和39.6％的mIoUs.
 
-其他方法，如CAMN，ParseNet和GCE建议通过引入全局上下文信息来提升性能，并获得41.2％，40.4％和46.5％的mIoU。
+其他方法，如CAMN，ParseNet和GCE建议通过引入全局上下文信息来提升性能，并获得41.2％，40.4％和46.5％的mIoU.
 
-尽管有所改进，但这些方法忽略了图像中的长距离依赖，这对于推断出巨大的像素至关重要。
+尽管有所改进，但这些方法忽略了图像中的长距离依赖，这对于推断出巨大的像素至关重要.
 
 论文的方法使用了DD-RNN, 而且没有使用任何的类别权重策略和后处理. 使用VGG-16时, 和改进主要针对的网络[44]对应的架构(DAG-RNN-CRF)x相比, 性能还是好很多.
 
@@ -146,15 +146,15 @@ Datasets: We test our method on the large-scale PASCAL Context [38], MIT ADE20K 
 
 ## 总结
 
-本文提出了用于场景标记的密集RNN。与探索有限依赖关系的现有方法不同，我们的DAG结构化密集RNN（DD-RNN）通过图像中的密集连接利用丰富的语境依赖性，这更好地提高了图像单元的判别力。
+本文提出了用于场景标记的密集RNN. 与探索有限依赖关系的现有方法不同，我们的DAG结构化密集RNN（DD-RNN）通过图像中的密集连接利用丰富的语境依赖性，这更好地提高了图像单元的判别力.
 
-此外，考虑到不同的依赖并不总是同样有助于识别每个图像单元，我们提出了一种注意力模型，以便为相关的依赖关系分配更多的重要性。
+此外，考虑到不同的依赖并不总是同样有助于识别每个图像单元，我们提出了一种注意力模型，以便为相关的依赖关系分配更多的重要性.
 
-我们与CNN集成，开发了端到端标签系统。PASCAL Context，MIT ADE20K和Cityscapes的广泛实验表明，我们的DD-RNN显着改善了基线并超越了其他最先进的算法，证明了所提出的dense RNN的有效性。
+我们与CNN集成，开发了端到端标签系统. PASCAL Context，MIT ADE20K和Cityscapes的广泛实验表明，我们的DD-RNN显着改善了基线并超越了其他最先进的算法，证明了所提出的dense RNN的有效性.
 
 ## 参考
 
-DAG-RNN: 
+DAG-RNN:
 
 论文: https://arxiv.org/abs/1509.00552
 
