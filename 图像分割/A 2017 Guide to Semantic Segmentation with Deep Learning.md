@@ -31,7 +31,7 @@ VOC2012 和MSCOCO 是语义分割方面最重要的数据库.
 
 比较原始的深度学习处理方式是基于像素块来分类的，也就是基于某个像素周围像素组成的像素块(patch)来判断某个像素的类别. 这样做的一个**主要原因是当时采用的分类网络通常都有全连接层**，要求使用固定尺寸的图像.
 
-在2014年，来自伯克利（美国加利福尼亚州西部城市）的 Long et al 提出了全卷积神经网络(FCN）,在没有采用任何全连接层的情况下完成了像素级别的预测. FCN允许输入任意尺寸的图片，并且比基于像素块的分类方法要快很多. 几乎所有后续的语义分割方法都采用了FCN的这种范式.
+在2014年，来自伯克利(美国加利福尼亚州西部城市)的 Long et al 提出了全卷积神经网络(FCN),在没有采用任何全连接层的情况下完成了像素级别的预测. FCN允许输入任意尺寸的图片，并且比基于像素块的分类方法要快很多. 几乎所有后续的语义分割方法都采用了FCN的这种范式.
 
 用CNN做分割任务，除了全连接层的影响以外，另外一个主要的问题是池化层. *池化层可以在丢失一部分位置信息的情况下增大感受野并能够获取更广泛的上下文信息*. 但是，*语义分割是每个像素和类别的映射关系，所以需要保留位置信息的*. 下面论述两种不同的改进架构可以解决这个问题.
 
@@ -68,9 +68,9 @@ VOC2012 和MSCOCO 是语义分割方面最重要的数据库.
 
 ### FCN
 
-- Fully Convolutional Networks for Semantic Segmentation（用于语义分割的全卷积神经网络）
+- Fully Convolutional Networks for Semantic Segmentation(用于语义分割的全卷积神经网络)
 - Submitted on 14 Nov 2014(提交于2014-11-14)
-- [Arxiv Link](https://arxiv.org/abs/1411.4038)（论文链接）
+- [Arxiv Link](https://arxiv.org/abs/1411.4038)(论文链接)
 
 **主要贡献**：
 
@@ -81,7 +81,7 @@ VOC2012 和MSCOCO 是语义分割方面最重要的数据库.
 
 **解释**：
 
-论文主要的发现是把分类网络中的全连接层看成了卷积核覆盖整个区域的卷积层. 这就相当于通过交错的像素块来评估原始的分类网络，但是由于在像素块之间的计算是共享的，所以相比来说效率更高. 尽管这不是仅有的一篇发现此观点的论文(比如其他的论文[overfeat](https://arxiv.org/abs/1312.6229)）,但是这篇论文提高了了VOC2012最优的实验结果.
+论文主要的发现是把分类网络中的全连接层看成了卷积核覆盖整个区域的卷积层. 这就相当于通过交错的像素块来评估原始的分类网络，但是由于在像素块之间的计算是共享的，所以相比来说效率更高. 尽管这不是仅有的一篇发现此观点的论文(比如其他的论文[overfeat](https://arxiv.org/abs/1312.6229)),但是这篇论文提高了了VOC2012最优的实验结果.
 
 ![FCN architecture](http://blog.qure.ai/assets/images/segmentation-review/FCN%20-%20illustration.png)
 
@@ -151,9 +151,9 @@ pooling有助于分类网络，因为增加了感受野. 但这不是分割的�
 
 ![Dilated/Atrous Convolutions](https://raw.githubusercontent.com/vdumoulin/conv_arithmetic/master/gif/dilation.gif)
 
-扩张卷积层（在DeepLab中也称为迂回卷积）允许感受野的指数增加而不减小空间维度. 来自预训练分类网络（此处为VGG）的最后两个pooling layer被移除，随后的卷积层被扩张卷积替换. 特别地，pool-3和pool-4之间的卷积具有膨胀系数2，并且pool-4之后的卷积具有膨胀系数4. 利用该模块（本文中称为*frontend module*），获得密集预测而不增加任何参数数量.
+扩张卷积层(在DeepLab中也称为迂回卷积)允许感受野的指数增加而不减小空间维度. 来自预训练分类网络(此处为VGG)的最后两个pooling layer被移除，随后的卷积层被扩张卷积替换. 特别地，pool-3和pool-4之间的卷积具有膨胀系数2，并且pool-4之后的卷积具有膨胀系数4. 利用该模块(本文中称为*frontend module*)，获得密集预测而不增加任何参数数量.
 
-模块（本文中称为*context module*）用*frontend module*的输出作为输入分开训练. 该模块是不同扩张的扩张卷积的级联，因此聚合了多尺度上下文并且改善了来自前端的预测.
+模块(本文中称为*context module*)用*frontend module*的输出作为输入分开训练. 该模块是不同扩张的扩张卷积的级联，因此聚合了多尺度上下文并且改善了来自前端的预测.
 
 *Benchmarks (VOC2012)*:
 
@@ -183,14 +183,14 @@ ScoreCommentSource
 *Key Contributions*:
 
 - 使用扩张卷积
-- 提出了扩张空间金字塔池（*atrous spatial pyramid pooling (ASPP)*）
+- 提出了扩张空间金字塔池(*atrous spatial pyramid pooling (ASPP)*)
 - Use Fully connected CRF
 
 *Explanation*:
 
 **在不增加参数数量的情况下，Atrous / Dilated卷积增加了视野. **
 
-通过将多个重新缩放版本的原始图像传递到并行CNN分支（图像金字塔）和/或通过使用具有不同采样率（ASPP）的多个并行的迂回卷积层来实现多尺度处理.
+通过将多个重新缩放版本的原始图像传递到并行CNN分支(图像金字塔)和/或通过使用具有不同采样率(ASPP)的多个并行的迂回卷积层来实现多尺度处理.
 
 结构化预测由完全连接的CRF完成. CRF作为后处理步骤单独训练/调整.
 
@@ -253,7 +253,7 @@ ScoreCommentSource
 
 扩张卷积用于扩张卷积的论文来修改Resnet，并且向其添加一个金字塔池化模块. 该模块将来自ResNet的特征映射与并行池化层的上采样输出连接，其中并行池化层的核覆盖整个，一半和一小部分的图像.
 
-在ResNet的第四阶段之后（即输入到金字塔池模块），应用除了主分支损失之外的一个辅助损失. 这个想法在其他地方也被称为中间监督.
+在ResNet的第四阶段之后(即输入到金字塔池模块)，应用除了主分支损失之外的一个辅助损失. 这个想法在其他地方也被称为中间监督.
 
 ![PSPNet Architecture](http://blog.qure.ai/assets/images/segmentation-review/pspnet.png)
 PSPNet Architecture. [Source](https://arxiv.org/abs/1612.01105).
@@ -280,11 +280,11 @@ ScoreCommentSource
 
 语义分割需要分割对象的分割和分类. 由于完全连接的层不能存在于分割架构中，因此采用具有非常大的核的卷积.
 
-采用大核的另一个原因是虽然像ResNet这样的更深层次的网络具有非常大的感受野，但研究表明网络倾向于从更小的区域（有效的接收域）收集信息.
+采用大核的另一个原因是虽然像ResNet这样的更深层次的网络具有非常大的感受野，但研究表明网络倾向于从更小的区域(有效的接收域)收集信息.
 
-较大的核计算量很大并且具有许多参数. 因此，k×k卷积用1×k + k×1和k×1和1×k卷积的和来近似. 该模块在本文中称为全局卷积网络（*Global Convolutional Network* (GCN) ）.
+较大的核计算量很大并且具有许多参数. 因此，k×k卷积用1×k + k×1和k×1和1×k卷积的和来近似. 该模块在本文中称为全局卷积网络(*Global Convolutional Network* (GCN) ).
 
-继续看架构，ResNet（没有任何扩张卷积）形成架构的编码器部分，而GCN和反卷积形成解码器. 还使用称为边界细化（ *Boundary Refinement* (BR) ）的简单残差块.
+继续看架构，ResNet(没有任何扩张卷积)形成架构的编码器部分，而GCN和反卷积形成解码器. 还使用称为边界细化( *Boundary Refinement* (BR) )的简单残差块.
 
 ![GCN Architecture](http://blog.qure.ai/assets/images/segmentation-review/large_kernel_matter.png)
 GCN Architecture. [Source](https://arxiv.org/abs/1703.02719).
@@ -312,7 +312,7 @@ ScoreCommentSource
 
 ResNet模型被修改为使用扩张卷积，如DeepLabv2和扩张卷积. 改进的ASPP涉及图像级特征的连接，1x1卷积和3个不同速率的3x3 atrous卷积. 在每个并行卷积层之后使用批量归一化.
 
-级联模块是一个resnet块，除了组件卷积层以不同的rate的空洞卷积组成. 此模块类似于扩张卷积论文中使用的上下文模块，但这直接应用于中间特征映射而不是信念映射（**信念映射是具有等于类数的通道的最终CNN特征映射**）.
+级联模块是一个resnet块，除了组件卷积层以不同的rate的空洞卷积组成. 此模块类似于扩张卷积论文中使用的上下文模块，但这直接应用于中间特征映射而不是信念映射(**信念映射是具有等于类数的通道的最终CNN特征映射**).
 
 两个提出的模型都是独立评估的，并且尝试将两者结合起来, 但是并没有改善性能. 它们两个在验证集熵上表现非常相似，ASPP表现稍好一些. 不使用CRF.
 

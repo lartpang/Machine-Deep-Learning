@@ -57,7 +57,7 @@ ImageNet包含的图片分辨率是变化的, 然而我们的系统需要的输�
 
 最后我们搭建的架构有一些类似Ciresan等人[5]提出的“柱状”CNN, 不过我们的CNN网络的**columns**之间是非独立的. 这个机制分别减小了我们的top1错误率1.7% 和 top5错误率1.2%, 和每个卷积层许多神经元在同一块GPU上训练像比较起来, 两块GPU网络比一块GPU花费更少的时间.
 
-（单GPU模型和双GPU模型的神经元数量其实差不多, 因为神经网络大部分的参数集中在第一个全连接层, 其接收的是最后一个卷积层的输出结果. 所以为了使两种模型具有大致相同数量的参数, 我们没有将最后一个卷积层的规模减半, 其后的全连接层也不用. 这样的处理导致两者的分类效果对比其实是有利于单GPU模型的, 因为它的神经元数量比双GPU模型的“一半”多一些. ）
+（单GPU模型和双GPU模型的神经元数量其实差不多, 因为神经网络大部分的参数集中在第一个全连接层, 其接收的是最后一个卷积层的输出结果. 所以为了使两种模型具有大致相同数量的参数, 我们没有将最后一个卷积层的规模减半, 其后的全连接层也不用. 这样的处理导致两者的分类效果对比其实是有利于单GPU模型的, 因为它的神经元数量比双GPU模型的“一半”多一些. )
 
 > 译者注：**columns**的解释我查阅了一篇名为*Multi-column Deep Neural Networks for Image Classification*的论文, 也是Ciresan写的, 里面有提到一个column就是一个DNNmodel, 在此文中我推测是**指单个GPU里的神经网络**. 而**非独立就是指两个GPU上的网络之间是有连接层**的.
 >
@@ -65,7 +65,7 @@ ImageNet包含的图片分辨率是变化的, 然而我们的系统需要的输�
 
 ### 局部响应归一化
 
-核函数的顺序在开始训练之前都是任意的而且是确定的. 受真实神经元的启发, 响应归一化的顺序实现了**单侧抑制**（lateral inhibition）的形式, **为使用不同核函数计算的神经元输出创造了竞争**.
+核函数的顺序在开始训练之前都是任意的而且是确定的. 受真实神经元的启发, 响应归一化的顺序实现了**单侧抑制**(lateral inhibition)的形式, **为使用不同核函数计算的神经元输出创造了竞争**.
 
 > lateral inhibition:相近的神经元彼此之间发生的抑制作用, 即在某个神经元受指刺激而产生兴奋时, 再刺激相近的神经元, 则后者所发生的兴奋对前者产生的抑制作用.
 
@@ -89,7 +89,7 @@ ImageNet包含的图片分辨率是变化的, 然而我们的系统需要的输�
 
 **公式解释**
 
-这个公式中的a表示**卷积层（包括卷积操作和池化操作）后的输出结果**, 这个输出结果的结构是一个四维数组`[batch,height,width,channel]`.
+这个公式中的a表示**卷积层(包括卷积操作和池化操作)后的输出结果**, 这个输出结果的结构是一个四维数组`[batch,height,width,channel]`.
 
 这里可以简单解释一下, batch就是批次数(每一批为一张图片), height就是图片高度, width就是图片宽度.
 
@@ -99,7 +99,7 @@ $a^{i}_{(x,y)}$表示在这个输出结构(输出的feature map)中的一个位�
 
 论文公式中的**N表示通道数(channel)**.
 
-**$a,n/2,k,α,β$分别表示函数中的input, depth_radius, bias, alpha, beta**, 其中$n/2,k,α,β$都是自定义的, 特别注意一下$∑$叠加的方向是沿着通道方向的, 即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的, 也就是**一个点同channel方向的前面n/2个通道（最小为第0个通道）和后n/2个通道（最大为第d-1个通道）的点的平方和(共n+1个点)**.
+**$a,n/2,k,α,β$分别表示函数中的input, depth_radius, bias, alpha, beta**, 其中$n/2,k,α,β$都是自定义的, 特别注意一下$∑$叠加的方向是沿着通道方向的, 即每个点值的平方和是沿着feature map的中对应第a批数据的结果的三个维度中的channel方向的, 也就是**一个点同channel方向的前面n/2个通道(最小为第0个通道)和后n/2个通道(最大为第d-1个通道)的点的平方和(共n+1个点)**.
 
 > 这个公式作用的结果就是导致: 若是当前通道的值偏大, 那么就会相对的减弱相邻通道的值的大小. 大值会抑制相邻通道的结果.
 
@@ -146,7 +146,7 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 群卷积最早出现于AlexNet中. 是为了解决显存不够的问题, 将网络部署在两张GTX 580显卡上训练, Alex认为group conv的方式能够增加 filter之间的对角相关性, 而且能够减少训练参数, 不容易过拟合, 这类似于正则的效果.
 
-我们假设上一层的输出feature map有N个, 即通道数channel=N, 也就是说上一层有N个卷积核. 再假设群卷积的群数目M. 那么该群卷积层的操作就是, 先将channel分成M份. 每一个group对应N/M个channel, 与之独立连接. 然后各个group卷积完成后将输出叠在一起（concatenate）, 作为这一层的输出channel.
+我们假设上一层的输出feature map有N个, 即通道数channel=N, 也就是说上一层有N个卷积核. 再假设群卷积的群数目M. 那么该群卷积层的操作就是, 先将channel分成M份. 每一个group对应N/M个channel, 与之独立连接. 然后各个group卷积完成后将输出叠在一起(concatenate), 作为这一层的输出channel.
 
 > https://blog.csdn.net/hhy_csdn/article/details/80030468
 >
@@ -197,9 +197,9 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 我们运用两种数据增量方式, 计算量都很小, 所以转换得到的新图像不用存在硬盘中. 我们的转换操作是在CPU上用python实现的, 而GPU专门用于训练模型. 所以实际训练中, 数据增量操作对我们的CNN训练的总计算量没有影响.
 
-1. 第一种数据增量方式是**图像变换(随机剪裁)和水平翻转**. 具体操作是从原本大小为![256\times 256](https://www.zhihu.com/equation?tex=256%5Ctimes+256)的图象中提取所有大小为![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)的子图像（以及他们的水平翻转图像）, 然后将这些子图象作为我们CNN的输入图像. （这解释了为什么图二中我们模型的输入层的大小是![224 \times 224 \times 3](https://www.zhihu.com/equation?tex=224+%5Ctimes+224+%5Ctimes+3)）. 经过如此操作, 我们的训练数据集变为了原来的2048倍（ ![(256-224)^2\times2](https://www.zhihu.com/equation?tex=%28256-224%29%5E2%5Ctimes2) ）. 虽然扩大后的数据之间的相关性非常大, 但如果不这样操作, 我们的网络会出现严重的过拟合现象, 可能会迫使我们使用规模更小的网络. 在测试的时候, 模型对每个输入图像提取五个![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)子图像（四个角落和中心）以及他们分别的水平翻转图像（总共10个）, 通过softmax层进行预测, 并将10个预测值平均.
+1. 第一种数据增量方式是**图像变换(随机剪裁)和水平翻转**. 具体操作是从原本大小为![256\times 256](https://www.zhihu.com/equation?tex=256%5Ctimes+256)的图象中提取所有大小为![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)的子图像(以及他们的水平翻转图像), 然后将这些子图象作为我们CNN的输入图像. (这解释了为什么图二中我们模型的输入层的大小是![224 \times 224 \times 3](https://www.zhihu.com/equation?tex=224+%5Ctimes+224+%5Ctimes+3)). 经过如此操作, 我们的训练数据集变为了原来的2048倍( ![(256-224)^2\times2](https://www.zhihu.com/equation?tex=%28256-224%29%5E2%5Ctimes2) ). 虽然扩大后的数据之间的相关性非常大, 但如果不这样操作, 我们的网络会出现严重的过拟合现象, 可能会迫使我们使用规模更小的网络. 在测试的时候, 模型对每个输入图像提取五个![224\times 224](https://www.zhihu.com/equation?tex=224%5Ctimes+224)子图像(四个角落和中心)以及他们分别的水平翻转图像(总共10个), 通过softmax层进行预测, 并将10个预测值平均.
 
-2. 第二种方式是调整训练图像的RGB各颜色通道强度(光照变换). 具体操作是, 对训练数据集所有图像的每个像素RGB值分别进行主成分分析（PCA）. 然后将原本的图像加上(主成分特征向量)与(特征值)和(一个随机量的乘积). 也就是对于某图像的每一个像素![I_{xy} = \left[ I_{xy} ^{R},I_{xy} ^{G},I_{xy} ^{B}\right]](https://www.zhihu.com/equation?tex=I_%7Bxy%7D+%3D+%5Cleft%5B+I_%7Bxy%7D+%5E%7BR%7D%2CI_%7Bxy%7D+%5E%7BG%7D%2CI_%7Bxy%7D+%5E%7BB%7D%5Cright%5D)加上以下算式的结果：
+2. 第二种方式是调整训练图像的RGB各颜色通道强度(光照变换). 具体操作是, 对训练数据集所有图像的每个像素RGB值分别进行主成分分析(PCA). 然后将原本的图像加上(主成分特征向量)与(特征值)和(一个随机量的乘积). 也就是对于某图像的每一个像素![I_{xy} = \left[ I_{xy} ^{R},I_{xy} ^{G},I_{xy} ^{B}\right]](https://www.zhihu.com/equation?tex=I_%7Bxy%7D+%3D+%5Cleft%5B+I_%7Bxy%7D+%5E%7BR%7D%2CI_%7Bxy%7D+%5E%7BG%7D%2CI_%7Bxy%7D+%5E%7BB%7D%5Cright%5D)加上以下算式的结果：
 
    ![\[ \left[\textbf{p}_{1},\textbf{p}_{2},\textbf{p}_{3}\right]\left[\alpha _{1}\lambda _{1},\alpha _{2}\lambda _{2},\alpha _{3}\lambda _{3}\right]^{T} \]](https://www.zhihu.com/equation?tex=%5C%5B+%5Cleft%5B%5Ctextbf%7Bp%7D_%7B1%7D%2C%5Ctextbf%7Bp%7D_%7B2%7D%2C%5Ctextbf%7Bp%7D_%7B3%7D%5Cright%5D%5Cleft%5B%5Calpha+_%7B1%7D%5Clambda+_%7B1%7D%2C%5Calpha+_%7B2%7D%5Clambda+_%7B2%7D%2C%5Calpha+_%7B3%7D%5Clambda+_%7B3%7D%5Cright%5D%5E%7BT%7D+%5C%5D)
 
@@ -213,7 +213,7 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 结合多个不同模型的预测结果可以降低测试错误率, 但对于本身就需要数天时间训练的大型神经网络而言, 这是很奢侈的. 然而, 还是有很高效的方法**能够结合模型的预测结果**, 而且只耗费大约两倍的训练时间.
 
-因此, **每一次训练一个图像时, 神经网络就会随机生成一个新的架构, 但这些架构中使用的权重是一样的**. 通过随机失活减少了神经元之间复杂的互相适应性（co-adaptation）, 因为通过随机失活, 神经元无法过分依赖于某个有输出结果的前一神经元（**译者注**：因为没有输出结果的神经元可能是因为被随机“失活”了, 而不是因为其对输入特征解释能力不佳）. 在随机神经元组的配合下, 这个神经元也因此被迫去学习更加**鲁棒**且**有用**的特征. 在测试时, 我们使用所有的神经元, 将他们的输出结果乘以0.5, 这其实是由极多的经过随机失活的神经网络产生的平均分类结果的一个合理近似值.
+因此, **每一次训练一个图像时, 神经网络就会随机生成一个新的架构, 但这些架构中使用的权重是一样的**. 通过随机失活减少了神经元之间复杂的互相适应性(co-adaptation), 因为通过随机失活, 神经元无法过分依赖于某个有输出结果的前一神经元(**译者注**：因为没有输出结果的神经元可能是因为被随机“失活”了, 而不是因为其对输入特征解释能力不佳). 在随机神经元组的配合下, 这个神经元也因此被迫去学习更加**鲁棒**且**有用**的特征. 在测试时, 我们使用所有的神经元, 将他们的输出结果乘以0.5, 这其实是由极多的经过随机失活的神经网络产生的平均分类结果的一个合理近似值.
 
 我们在图中的**前两个全连接层运用随机失活**. 否则, 神经网络训练就会出现很严重的过拟合. 但**随机失活几乎使得模型收敛所需要的循环翻倍**.
 
@@ -227,15 +227,15 @@ $26/(0+1*(25^2+26^2+27^2+28^2))^1$
 
 权重的更新方法如下：![\begin{equation} v_{i+1} := 0.9\cdot v_{i}-0.0005\cdot\epsilon \cdot w_{i}-\epsilon\cdot\left< \frac{\partial L}{\partial w}|_{w_{i}} \right>_{D_{i}} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+v_%7Bi%2B1%7D+%3A%3D+0.9%5Ccdot+v_%7Bi%7D-0.0005%5Ccdot%5Cepsilon+%5Ccdot+w_%7Bi%7D-%5Cepsilon%5Ccdot%5Cleft%3C+%5Cfrac%7B%5Cpartial+L%7D%7B%5Cpartial+w%7D%7C_%7Bw_%7Bi%7D%7D+%5Cright%3E_%7BD_%7Bi%7D%7D+%5Cend%7Bequation%7D)![\begin{equation} w_{i+1} := w_i + v_{i+1} \end{equation}](https://www.zhihu.com/equation?tex=%5Cbegin%7Bequation%7D+w_%7Bi%2B1%7D+%3A%3D+w_i+%2B+v_%7Bi%2B1%7D+%5Cend%7Bequation%7D)
 
-![i](https://www.zhihu.com/equation?tex=i)是循环序数, ![v](https://www.zhihu.com/equation?tex=v)是动量参数, ![\epsilon](https://www.zhihu.com/equation?tex=%5Cepsilon)是学习率, ![\left< \frac{\partial L}{\partial w}|_{w_{i}} \right>_{D_{i}}](https://www.zhihu.com/equation?tex=%5Cleft%3C+%5Cfrac%7B%5Cpartial+L%7D%7B%5Cpartial+w%7D%7C_%7Bw_%7Bi%7D%7D+%5Cright%3E_%7BD_%7Bi%7D%7D)是第![ i](https://www.zhihu.com/equation?tex=+i)个批量样本![D_i](https://www.zhihu.com/equation?tex=D_i)（128个）上**所有目标函数在![w_i](https://www.zhihu.com/equation?tex=w_i)处对权重的偏导数的均值**.
+![i](https://www.zhihu.com/equation?tex=i)是循环序数, ![v](https://www.zhihu.com/equation?tex=v)是动量参数, ![\epsilon](https://www.zhihu.com/equation?tex=%5Cepsilon)是学习率, ![\left< \frac{\partial L}{\partial w}|_{w_{i}} \right>_{D_{i}}](https://www.zhihu.com/equation?tex=%5Cleft%3C+%5Cfrac%7B%5Cpartial+L%7D%7B%5Cpartial+w%7D%7C_%7Bw_%7Bi%7D%7D+%5Cright%3E_%7BD_%7Bi%7D%7D)是第![ i](https://www.zhihu.com/equation?tex=+i)个批量样本![D_i](https://www.zhihu.com/equation?tex=D_i)(128个)上**所有目标函数在![w_i](https://www.zhihu.com/equation?tex=w_i)处对权重的偏导数的均值**.
 
-我们将每一个层级的权重初始化为**均值0, 标准差0.01的正态随机量**. 第二、四核五卷积层以及全连接层的**偏差系数（bias）设置为1**. 这样可以在训练初期给ReLU单元提供正的输入值, 从而加快训练速度. 其他层级的偏差系数初始设为0.
+我们将每一个层级的权重初始化为**均值0, 标准差0.01的正态随机量**. 第二、四核五卷积层以及全连接层的**偏差系数(bias)设置为1**. 这样可以在训练初期给ReLU单元提供正的输入值, 从而加快训练速度. 其他层级的偏差系数初始设为0.
 
 所有的层级我们都使用相同的学习率, 具体数值是我们在训练过程中不断调整得出的. 主要调整方法是**每当模型在当前的学习率下验证错误率不再降低时, 我们就把学习率除以10**. 初始学习率是0.01, 在完成训练过程中总共减少了三次.
 
 ### 结果
 
-另一个探索神经网络视觉识别能力的方法是研究图像在最后一个层级, 即维度为4096的隐含层上产生的特征激活状态（feature activation）（**译者注**：其实就是通过最后一个隐含层的输出结果）.
+另一个探索神经网络视觉识别能力的方法是研究图像在最后一个层级, 即维度为4096的隐含层上产生的特征激活状态(feature activation)(**译者注**：其实就是通过最后一个隐含层的输出结果).
 
 如果两个图像的**特征激活状态向量之间的欧式距离**比较小, 那么就代表神经网络内部较高层次认为这两张图是类似的. (也就是送到最终输出的分类层上的输入近似的时候,也就更容易划分到一类)
 

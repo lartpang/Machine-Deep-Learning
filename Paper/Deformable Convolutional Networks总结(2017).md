@@ -240,7 +240,7 @@ $\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\ma
 >
 > ![1543658023608](assets/1543658023608.png)
 >
-> 看这图, 通过RPN提取出来的RoI区域, 其是包含了“坐标、长宽”的4值属性的, 也就是说不同的RoI区域能够对应到score map的不同位置上, 而一个RoI会分成 ![k\times k](http://www.zhihu.com/equation?tex=k%5Ctimes+k) 个bins（也就是子区域. 每个子区域bin的长宽分别是 ![\frac{h}{k}](http://www.zhihu.com/equation?tex=%5Cfrac%7Bh%7D%7Bk%7D) 和 ![\frac{w}{k}](http://www.zhihu.com/equation?tex=%5Cfrac%7Bw%7D%7Bk%7D) ）, **每个bin都对应到score map上的某一个区域**（上图已经很明显的画出来了）.
+> 看这图, 通过RPN提取出来的RoI区域, 其是包含了“坐标、长宽”的4值属性的, 也就是说不同的RoI区域能够对应到score map的不同位置上, 而一个RoI会分成 ![k\times k](http://www.zhihu.com/equation?tex=k%5Ctimes+k) 个bins(也就是子区域. 每个子区域bin的长宽分别是 ![\frac{h}{k}](http://www.zhihu.com/equation?tex=%5Cfrac%7Bh%7D%7Bk%7D) 和 ![\frac{w}{k}](http://www.zhihu.com/equation?tex=%5Cfrac%7Bw%7D%7Bk%7D) ), **每个bin都对应到score map上的某一个区域**(上图已经很明显的画出来了).
 >
 > 那么好既然该RoI的每个bin都对应到score map上的某一个子区域, 那么池化操作就是在该bin对应的score map上的子区域执行, 且执行的是平均池化. 我们在上一部分已经讲了, 第 ![i](http://www.zhihu.com/equation?tex=i) 个bin应对在第 ![i](http://www.zhihu.com/equation?tex=i) 个score map上找响应值, 那么也就是在**第 ![i](http://www.zhihu.com/equation?tex=i) 个score map上的“该第 ![i](http://www.zhihu.com/equation?tex=i) 个bin对应的位置”上进行池化操作**, 且池化是**取“bin这个范围内的所有值的平均值”**.
 >
@@ -262,7 +262,7 @@ $\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\ma
 > >
 > > 但是按照前面的的公式$\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\mathbf{p})/n_{ij}$来讲, 这里输出里的第(i,j)个位置上的元素仅和第(i,j)个得分图上的第(i,j)个bin里对应的数据有关系, 也就是应该是按照第1点来理解的.
 >
-> （注意, 这里不需要使softmax分类器了, 只需要使用简单的softmax函数, 因为这里就是通过简单的比大小来判断最终的类别的, 下图的2个公式已经写的很清楚了）
+> (注意, 这里不需要使softmax分类器了, 只需要使用简单的softmax函数, 因为这里就是通过简单的比大小来判断最终的类别的, 下图的2个公式已经写的很清楚了)
 >
 > ![1543658566310](assets/1543658566310.png)
 
