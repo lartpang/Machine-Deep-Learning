@@ -4,7 +4,7 @@
 
 2015年12月, 发布了一个新版本的GoogLeNet(Rethinking the Inception Architecture for Computer Vision)模块和相应的架构, 并且更好地解释了原来的GoogLeNet架构, GoogLeNet原始思想：
 
-* 通过构建平衡深度和宽度的网络, 最大化网络的信息流。在进入pooling层之前增加feature maps
+* 通过构建平衡深度和宽度的网络, 最大化网络的信息流. 在进入pooling层之前增加feature maps
 * 当网络层数深度增加时, 特征的数量或层的宽度也相对应地增加
 * 在每一层使用宽度增加以增加下一层之前的特征的组合
 * 只使用3x3卷积,甚至非对称卷积

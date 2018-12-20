@@ -6,7 +6,7 @@
 
 ## 结构
 
-文章对U-Net改进的点主要是skip connection。
+文章对U-Net改进的点主要是skip connection.
 
 **作者认为skip connection 直接将U-Net中encoder的浅层特征与decoder的深层特征结合是不妥当的, 会产生semantic gap. **
 

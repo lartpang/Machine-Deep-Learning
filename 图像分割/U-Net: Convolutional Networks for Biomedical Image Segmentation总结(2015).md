@@ -13,7 +13,7 @@
 
 > 和FCN相比:
 >
-> U-Net的第一个特点是完全对称, 也就是左边和右边是很类似的, 而FCN的decoder相对简单, 只用了一个deconvolution的操作, 之后并没有跟上卷积结构。
+> U-Net的第一个特点是完全对称, 也就是左边和右边是很类似的, 而FCN的decoder相对简单, 只用了一个deconvolution的操作, 之后并没有跟上卷积结构.
 >
 > 第二个区别就是skip connection, FCN用的是加操作（summation）, U-Net用的是叠操作（concatenation）.
 

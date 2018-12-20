@@ -2,7 +2,7 @@
 
 ## 前言
 
-2015年2月Google又发表了新的文章, 在googLeNet中加入一个[Batch-normalized](http://arxiv.org/abs/1502.03167)层。
+2015年2月Google又发表了新的文章, 在googLeNet中加入一个[Batch-normalized](http://arxiv.org/abs/1502.03167)层.
 
 Batch-normalized层归一化计算图层输出处所有特征图的平均值和标准差,并使用这些值对其响应进行归一化. 这对应于“白化”数据非常有效,并且使得所有神经层具有相同范围并且具有零均值的响应.
 

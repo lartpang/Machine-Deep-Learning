@@ -4,7 +4,7 @@
 
 > https://arxiv.org/abs/1612.08242
 
-YOLO与Fast R-CNN相比有较大的定位误差, 与基于region proposal的方法相比具有较低的召回率。因此YOLO v2主要改进是提高召回率和定位能力。
+YOLO与Fast R-CNN相比有较大的定位误差, 与基于region proposal的方法相比具有较低的召回率. 因此YOLO v2主要改进是提高召回率和定位能力.
 
 论文主要工作有两部分：
 

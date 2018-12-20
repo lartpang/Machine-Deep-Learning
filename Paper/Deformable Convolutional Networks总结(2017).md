@@ -212,7 +212,7 @@ $\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\ma
 >
 > R-FCN会在共享卷积层的最后再接上一层卷积层, 而该卷积层就是“位置敏感得分图position-sensitive score map”, 该score map是什么意义呢？
 >
-> 首先它就是一层卷积层, 它的height和width和共享卷积层的一样, 但是它的channels= ![k^{2}(C+1)](http://www.zhihu.com/equation?tex=k%5E%7B2%7D%28C%2B1%29) , 如上图所示。
+> 首先它就是一层卷积层, 它的height和width和共享卷积层的一样, 但是它的channels= ![k^{2}(C+1)](http://www.zhihu.com/equation?tex=k%5E%7B2%7D%28C%2B1%29) , 如上图所示.
 >
 > 那么C表示物体类别种数再加上1个背景类别, 每个类别都有 ![k^{2}](http://www.zhihu.com/equation?tex=k%5E%7B2%7D)个score maps.
 >

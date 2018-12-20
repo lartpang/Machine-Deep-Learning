@@ -18,7 +18,7 @@
 
 ![faster_rcnn_test_model.jpg](https://i.loli.net/2017/09/03/59abc3ac37ee6.jpg)
 
-图为Faster R-CNN测试网络结构(网络模型文件为[faster_rcnn_test.pt](https://github.com/rbgirshick/py-faster-rcnn/blob/master/models/pascal_voc/VGG16/faster_rcnn_alt_opt/faster_rcnn_test.pt)), 可以清楚地看到图像在网络中的前向计算过程。
+图为Faster R-CNN测试网络结构(网络模型文件为[faster_rcnn_test.pt](https://github.com/rbgirshick/py-faster-rcnn/blob/master/models/pascal_voc/VGG16/faster_rcnn_alt_opt/faster_rcnn_test.pt)), 可以清楚地看到图像在网络中的前向计算过程.
 
 1. 对于一幅任意大小P×Q的图像, 首先缩放至固定大小M×N(源码中是要求**长边不超过1000, 短边不超过600**)
 2. 然后将缩放后的图像输入至采用VGG16模型的Conv Layer中, 最后一个feature map为conv5-3, 特征数(channels)为512

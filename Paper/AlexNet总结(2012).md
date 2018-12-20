@@ -1,6 +1,6 @@
 # AlexNet(2012)
 
-2012年, Alex Krizhevsky发表了[AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf), 相对比LeNet它的网络层次更加深, 从LeNet的5层到AlexNet的7层, 更重要的是AlexNet还赢得了2012年的ImageNet竞赛的第一。AlexNet不仅比LeNet的神经网络层数更多更深, 并且可以学习更复杂的图像高维特征。
+2012年, Alex Krizhevsky发表了[AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf), 相对比LeNet它的网络层次更加深, 从LeNet的5层到AlexNet的7层, 更重要的是AlexNet还赢得了2012年的ImageNet竞赛的第一. AlexNet不仅比LeNet的神经网络层数更多更深, 并且可以学习更复杂的图像高维特征.
 
 ## 小结
 

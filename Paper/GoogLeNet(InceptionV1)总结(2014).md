@@ -2,7 +2,7 @@
 
 ## 前言
 
-2014年, 在google工作的Christian Szegedy为了找到一个深度神经网络结构**能够有效地减少计算资源**, 于是有了这个[GoogleNet](https://arxiv.org/abs/1409.4842)了（也叫做Inception V1）。
+2014年, 在google工作的Christian Szegedy为了找到一个深度神经网络结构**能够有效地减少计算资源**, 于是有了这个[GoogleNet](https://arxiv.org/abs/1409.4842)了（也叫做Inception V1）.
 
 ## 概要
 

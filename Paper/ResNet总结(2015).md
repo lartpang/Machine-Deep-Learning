@@ -2,7 +2,7 @@
 
 ## 前言
 
-2015年12月[ResNet](https://arxiv.org/pdf/1512.03385v1.pdf)发表了, 时间上大概与Inception v3网络一起发表的。
+2015年12月[ResNet](https://arxiv.org/pdf/1512.03385v1.pdf)发表了, 时间上大概与Inception v3网络一起发表的.
 
 ResNet的结构可以极快地加速超深神经网络的训练, 模型的准确率也有非常大的提升.
 
