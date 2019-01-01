@@ -285,7 +285,8 @@ The power of our DeepMattePropNet comes from several of its advantages.
 
 ### 论文
 
-[A Closed Form Solution to Natural Image Matting](http://people.csail.mit.edu/alevin/papers/Matting-Levin-Lischinski-Weiss-CVPR06.pdf?)
+* [A Closed Form Solution to Natural Image Matting](http://people.csail.mit.edu/alevin/papers/Matting-Levin-Lischinski-Weiss-CVPR06.pdf?)
+* [Deep Image Matting](https://arxiv.org/abs/1703.03872)
 
 ### 拉普拉斯矩阵
 
