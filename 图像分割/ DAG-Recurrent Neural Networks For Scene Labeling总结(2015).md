@@ -1,6 +1,8 @@
 # DAG-Recurrent Neural Networks For Scene Labeling(2015)
 
 > 看完<Scene Parsing via Dense Recurrent Neural Networks with Attentional Selection(2018)>后, 再看这篇文章, 主要想要知道的是如何对于图像进行有向图的建模, 具体的"图像单元"指的是什么. 具体细节需要了解下.
+>
+> 这里应该指的是在CNN提取到的特征图上进行使用RNN.
 
 ## 关键点
 
