@@ -2,6 +2,15 @@
 
 > <http://arxiv.org/pdf/1703.03872v3.pdf>
 
+关键点:
+
+* 深度学习用于matting任务的改进
+* 使用提供的trimap和图片来输入编解码网络
+* 使用alpha预测损失(由真实alpha matte来监督)与组合损失(由真实color image来监督)来训练编解码网络
+* 使用获得的预测alpha matte进一步输入细化网络, 预测得到对于原始预测的修正, 得到最终的预测alpha matte
+* 使用进一步的alpha预测损失(由真实alpha matte来监督)来训练细化网络
+* 创建了一个更大的数据集, 没有公开, 只能和作者要
+
 * [Deep Image Matting](#deep-image-matting)
   * [Abstract](#abstract)
   * [Introduction](#introduction)
@@ -149,6 +158,8 @@ Our network leverages two losses.
 
 ![img](assets/2019-01-01-11-11-18.png)
 
+![img](assets/2019-01-01-12-21-27.png)
+
 The first loss is called the **alpha-prediction loss**, which is the absolute difference *between the ground truth alpha values and the predicted alpha values at each pixel*. However, due to the non-differentiable property of absolute values, we use the following loss function to approximate it.
 
 ![img](assets/2019-01-01-10-34-15.png)
@@ -221,11 +232,12 @@ Therefore, we extend our network to further refine the results from the first pa
 
 The network is a **fully convolutional network which includes 4 convolutional layers. Each of the first 3 convolutional layers is followed by a nonlinear “ReLU” layer**. There are no downsampling layers since we want to keep very subtle(细微) structures missed inthe first stage.
 
-In addition, we use a “skip-model” structure **where the 4-th channel of the input data is first scaled between 0 and 1 and then is added to the output of the network**.
+In addition, we use a “skip-model” structure **where the *4-th channel* of the input data is first scaled between 0 and 1 and then is added to the output of the network**.
 
 ![img](assets/2019-01-01-11-12-29.png)
 
-> 这里的描述和图上有些出入, 因为按照图上来看, 是这个4通道只是作为了输入, 而后期加上来的, 是一个预测出来的alpha matte. 应该是用哪个?
+> ~~这里的描述和图上有些出入, 因为按照图上来看, 是这个4通道只是作为了输入, 而后期加上来的, 是一个预测出来的alpha matte. 应该是用哪个?~~
+> 注意这里的描述, 是第四个通道. 也就是细化网络就是为了**预测出来一个对于前期预测出来的alpha matte的一个调整值**.
 
 The detailed configuration is shown in Fig. 3. The effect of our refinement stage is illustrated in Fig. 4. Note that it does not make large-scale changes to the alphamatte, but rather just refines and sharpens the alpha values.
 
@@ -234,7 +246,7 @@ The detailed configuration is shown in Fig. 3. The effect of our refinement stag
 #### Implementation
 
 1. During training, we first update the encoder-decoder part without the refinement part.
-2. After the encoder-decoder part is converged(融合), we fix its parameters and then update the refinement part. Only the alpha prediction loss (Eqn.2) is used due to its simple structure. We also use all the training strategies of the $1^{st}$ stage except the $4^{th}$ one.
+2. After the encoder-decoder part is converged(融合), we fix its parameters and then update the refinement part. **Only the alpha prediction loss (Eqn.2) is used due to its simple structure**. We also use all the training strategies of the $1^{st}$ stage except the $4^{th}$ one.
 3. After the refinement part is also converged, finally we fine-tune the the whole network together. (分阶段训练)
 
 We use Adam [20] to update both parts. A small learning rate $10^{−5}$ is set constantly during the training process.
