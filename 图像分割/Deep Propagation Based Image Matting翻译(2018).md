@@ -61,18 +61,18 @@ There exist three main approaches to digital matting:
 
 * sampling based techniques[Chuanget al., 2001; Fenget al.,2016]
 
- The sampling based techniques are founded on an assumption that two pixels with similar colors should be close in their alpha matte values(基于采样的技术是基于这样的假设：**具有相似颜色的两个像素应该在它们的alpha matte值中接近**).
+    The sampling based techniques are founded on an assumption that two pixels with similar colors should be close in their alpha matte values(基于采样的技术是基于这样的假设：**具有相似颜色的两个像素应该在它们的alpha matte值中接近**).
 
 * propagation based frameworks[Levinet al., 2008;Chenet al., 2013; Zheng and Kambhamettu, 2009]
 
- 基于传播的框架将用户绘制的前景和背景涂鸦的alpha值传播到未知区域。它利用像素的成对相似性来表示复杂的图像结构。在文献中, 基于传播的技术构成了不仅仅是图像matting的一种突出方法[Levinet al。，2008; Chenet al。，2013; Zheng and Kamb-hamettu，2009]以及图像分割和编辑（与图像matting非常相似的问题）[Chenet al。，2012; Endoet al。，2016]。这得益于主要由像素间亲和力测量确定的明确数学公式的可用性，所述**像素间亲和力测量仅表征相邻像素之间的局部相互作用**。这种表示可以在封闭形式中解决, 并轻松实施[Levinet al。，2008]。然而，*大多数现有的基于传播的方法通过使用图像颜色来确定成对相似性，从而导致低级成对相似性测量*。
+    基于传播的框架将用户绘制的前景和背景涂鸦的alpha值传播到未知区域。它利用像素的成对相似性来表示复杂的图像结构。在文献中, 基于传播的技术构成了不仅仅是图像matting的一种突出方法[Levinet al。，2008; Chenet al。，2013; Zheng and Kamb-hamettu，2009]以及图像分割和编辑（与图像matting非常相似的问题）[Chenet al。，2012; Endoet al。，2016]。这得益于主要由像素间亲和力测量确定的明确数学公式的可用性，所述**像素间亲和力测量仅表征相邻像素之间的局部相互作用**。这种表示可以在封闭形式中解决, 并轻松实施[Levinet al。，2008]。然而，*大多数现有的基于传播的方法通过使用图像颜色来确定成对相似性，从而导致低级成对相似性测量*。
 
- 这本质上等同于两个基本假设[Zheng and Kambhamettu，2009]：
+    这本质上等同于两个基本假设[Zheng and Kambhamettu，2009]：
 
- 1. 线性 alpha-color 关系，意味着 alpha matte 值是每个像素颜色的线性函数;
- 2. color-line(颜色线)模型，表示局部的图像颜色分布在颜色空间的一条线上
+    1. 线性 alpha-color 关系，意味着 alpha matte 值是每个像素颜色的线性函数;
+    2. color-line(颜色线)模型，表示局部的图像颜色分布在颜色空间的一条线上
 
- These propagation based techniques deteriorate inevitably(不可避免地恶化) when the above assumptions are violated in practice(当上述假设在实践中被证实时), typically when image color is not good enough for characterizing each pixel. The violation may result in “smearing” or “chunky” artifacts in alpha matte as descried in[Chenet al., 2013; Choet al., 2016; Xuet al., 2017;Aksoyet al., 2017] (侵坏可能会在alpha matte中以“涂抹”或“粗糙”的瑕疵重新显示出来).
+    These propagation based techniques deteriorate inevitably(不可避免地恶化) when the above assumptions are violated in practice(当上述假设在实践中被证实时), typically when image color is not good enough for characterizing each pixel. The violation may result in “smearing” or “chunky” artifacts in alpha matte as descried in[Chenet al., 2013; Choet al., 2016; Xuet al., 2017;Aksoyet al., 2017] (侵坏可能会在alpha matte中以“涂抹”或“粗糙”的瑕疵重新显示出来).
 
 * a hybrid of these two[Zheng and Kambhamettu, 2009;Wang and Cohen, 2005]
 
@@ -107,11 +107,11 @@ Our deep feature extraction module is comprised of two branches:
 
 * a semantic-level feature extraction branch
 
- The network structure of the semantic-level feature extraction branch is identical to the SegNet[Badrinarayananet al.,2017]which consists in an encoder network and a corresponding decoder network. The encoder network transforms the input into downsampled feature maps through convolutional layers and max-pooling layers. Specifically, it consists in 13 “Conv+ReLU” layers and 5 max-pooling layers.The “Conv+ReLU” layers correspond to the first 13 convolu-tional layers of the VGG16 network[Simonyan and Zisser-man, 2014]and each of them performs convolution with a filter bank to produce a set of feature maps, batch-normalizes the feature maps and then applies an element-wise rectified-linear nonlinearity (ReLU) max(0;x). The max-pooling is carried out with a 2x2 window and stride 2. The followed decoder network semantically upsamples the features learnt by the encoder via unpooling layers and convolutional layers to get dense features for predicting pairwise similarities. It is structured in a fashion that each of its layers corresponds to one encoder layers (e.g. “Conv+ReLU” vs. “Conv+ReLU”, unpooling vs. max-pooling ). As in[Badrinarayananet al.,2017], the max-pooling indices are memorized and then resued in the upsampling process in the decoder network.
+    The network structure of the semantic-level feature extraction branch is identical to the SegNet[Badrinarayananet al.,2017]which consists in an encoder network and a corresponding decoder network. The encoder network transforms the input into downsampled feature maps through convolutional layers and max-pooling layers. Specifically, it consists in 13 “Conv+ReLU” layers and 5 max-pooling layers.The “Conv+ReLU” layers correspond to the first 13 convolu-tional layers of the VGG16 network[Simonyan and Zisser-man, 2014]and each of them performs convolution with a filter bank to produce a set of feature maps, batch-normalizes the feature maps and then applies an element-wise rectified-linear nonlinearity (ReLU) max(0;x). The max-pooling is carried out with a 2x2 window and stride 2. The followed decoder network semantically upsamples the features learnt by the encoder via unpooling layers and convolutional layers to get dense features for predicting pairwise similarities. It is structured in a fashion that each of its layers corresponds to one encoder layers (e.g. “Conv+ReLU” vs. “Conv+ReLU”, unpooling vs. max-pooling ). As in[Badrinarayananet al.,2017], the max-pooling indices are memorized and then resued in the upsampling process in the decoder network.
 
 * a low-level feature extraction branch
 
- The branch for low-level features extraction is a network composed of 3 convolutional layers (with a 3x3 kernel), each of which is followed by a nonlinear “ReLU” layer. As shown in[Xuet al., 2017], low-level features can result in more matte details.
+    The branch for low-level features extraction is a network composed of 3 convolutional layers (with a 3x3 kernel), each of which is followed by a nonlinear “ReLU” layer. As shown in[Xuet al., 2017], low-level features can result in more matte details.
 
 They learn deep image representations which will be used to *measure the pairwise similarity for the matte propagation module*. The input to these two branches is **both a 4-channel matrix** constructed by concatenating the original image and the corresponding manually-drawn trimap along the channel dimension.
 
@@ -130,17 +130,17 @@ The affinity learning module learns pairwise affinity of pixels for propagation 
 
 * **The input to the affinity learning module is a $N_n \times 2(T_s+T_l)$ matrix** for which each row stores the learned $2(T_s+T_l)$ deep features for each pair of neighboring pixels.
 
- where $N_n$ denotes the total number of neighboring-pixel pairs. The **neighborhood can be defined as 4-connection** as in our paper.
+    where $N_n$ denotes the total number of neighboring-pixel pairs. The **neighborhood can be defined as 4-connection** as in our paper.
 
 * The affinity learning module consists of a *$1 \times 1 \times 2(T_s+T_l)$ convolutional layer* and an *exponential layer*.
 
- > 这里是怎么处理的? 原本是一个$N_n \times 2(T_s+T_l)$矩阵, 如何与$1 \times 1 \times 2(T_s+T_l)$ convolutional layer进行结合? 这里的exponential layer有什么用?
+    > 这里是怎么处理的? 原本是一个$N_n \times 2(T_s+T_l)$矩阵, 如何与$1 \times 1 \times 2(T_s+T_l)$ convolutional layer进行结合? 这里的exponential layer有什么用?
 
- **It predicts the affinity value for each pair of neighboring pixels.** (输出还是$N_n \times 2(T_s+T_l)$ , 只不过进行了空间的融合)
+    **It predicts the affinity value for each pair of neighboring pixels.** (输出还是$N_n \times 2(T_s+T_l)$ , 只不过进行了空间的融合)
 
 * All **affinity values output from this module form a $(N_rN_c) \times (N_rNc)$ symmetric and sparse(对称稀疏) affinity matrix $\mathbf{W}$** which will be then fed into the matte propagation module.
 
- > 这里是怎么由$N_n \times 2(T_s+T_l)$转化为$(N_rN_c) \times (N_rN_c)$的?
+    > 这里是怎么由$N_n \times 2(T_s+T_l)$转化为$(N_rN_c) \times (N_rN_c)$的?
 
 Note that these twos layers are both differentiable.
 
@@ -246,7 +246,7 @@ All networks are carried out on the same training and testing images. We provide
 
 ![img](assets/2018-12-31-16-10-04.png)
 
-We  show  **SAD  (sum  of  absolute  differences)  and  MSE(mean square error)** values over all the testing images in our datasets  in  Fig. 2  and  the  ones  for  each  of  the  alphamatting.com testing images in Fig. 3. From these error statistics,we have at least two findings.
+We  show  **SAD  (sum  of  absolute  differences)  and  MSE(mean square error)** values over all the testing images in our datasets  in  Fig. 2  and  the  ones  for  each  of  the  alphamatting.com testing images in Fig. 3. From these error statistics, we have at least two findings.
 
 * First, deep learning based alpha matting techniques perform overwhelmingly better than traditional techniques. This may benefit from the superiority of deep image representations learned from a huge image dataset in contrast to the hand-designed features.
 * Second, our deep matte propagation based method outperforms other two deep learning based matting techniques. This may arise from the fact that *our method learns deep image representations fora better matte propagation* **while others focus on learning the alpha matte directly**.
@@ -300,23 +300,23 @@ The power of our DeepMattePropNet comes from several of its advantages.
 
 * 与某结点邻接的所有边的权值和定义为该顶点的度d，多个d形成一个**度矩阵$D$**(对角阵).
 
-  ![img](https://img-blog.csdn.net/20141103173742531)
+    ![img](https://img-blog.csdn.net/20141103173742531)
 
 * **邻接矩阵$W$**，A子图与B子图之间所有边的权值之和.
 
-  ![img](https://img-blog.csdn.net/20141103155640992)
+    ![img](https://img-blog.csdn.net/20141103155640992)
 
- 其中，$w_{ij}$定义为*节点i到节点j的权值*，如果两个节点不是相连的，权值为零。
+    其中，$w_{ij}$定义为*节点i到节点j的权值*，如果两个节点不是相连的，权值为零。
 
 * **相似度矩阵s** 由权值矩阵得到，实践中一般用高斯核函数（也称径向基函数核）计算相似度，距离越大，代表其相似度越小。
 
-  ![img](https://img-blog.csdn.net/20141103175120604)
+    ![img](https://img-blog.csdn.net/20141103175120604)
 
 * 子图A的指示向量
 
-  ![img](https://img-blog.csdn.net/20141103172003343)
+    ![img](https://img-blog.csdn.net/20141103172003343)
 
-  表示顶点是否属于对应的子图.
+    表示顶点是否属于对应的子图.
 
 谱聚类的基本思想便是**利用样本数据之间的相似矩阵（拉普拉斯矩阵）进行特征分解（ 通过Laplacian Eigenmap 的降维方式降维）**，然后将得到的特征向量进行 K-means聚类。
 
@@ -343,16 +343,16 @@ The power of our DeepMattePropNet comes from several of its advantages.
 
 * 图
 
-  ![img](https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=b0864b28472309f7e36faa10420f0c39/64380cd7912397dd5e88c6b85882b2b7d1a2879d.jpg)
+    ![img](https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=b0864b28472309f7e36faa10420f0c39/64380cd7912397dd5e88c6b85882b2b7d1a2879d.jpg)
 
 * 度矩阵
 
-  ![img](https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=a4c72cd69d22720e7fcee5f84bca0a3a/96dda144ad3459821f876c2609f431adcbef8471.jpg)
+    ![img](https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=a4c72cd69d22720e7fcee5f84bca0a3a/96dda144ad3459821f876c2609f431adcbef8471.jpg)
 
 * 邻接矩阵
 
-  ![img](https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=89d0439b4434970a4373172da5cad1c0/d50735fae6cd7b89bf52b1370a2442a7d9330e43.jpg)
+    ![img](https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=89d0439b4434970a4373172da5cad1c0/d50735fae6cd7b89bf52b1370a2442a7d9330e43.jpg)
 
 * 拉普拉斯矩阵
 
-  ![img](https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=6612c64f0f46f21fcd345951c6256b31/d1a20cf431adcbefc7d1f6b2a9af2edda2cc9f99.jpg)
+    ![img](https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=6612c64f0f46f21fcd345951c6256b31/d1a20cf431adcbefc7d1f6b2a9af2edda2cc9f99.jpg)
