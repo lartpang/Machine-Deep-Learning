@@ -38,7 +38,7 @@ To our knowledge, our method is the first one designed for automatic portrait se
 
 Our work is related to work in both image segmentation and image stylization. The following sections provide a brief overview on several main segmentation methodologies(方法) (interactive, learning based, and image matting), as well as some background on various portrait-specific stylization algorithms.
 
-我们的工作与图像分割和图像风格化相关。以下部分简要介绍了几种主要的分割方法（交互式，基于学习的和图像遮罩），以及各种肖像特定风格化算法的背景知识。
+我们的工作与图像分割和图像风格化相关。以下部分简要介绍了几种主要的分割方法（交互式，基于学习的和图像matte），以及各种肖像特定风格化算法的背景知识。
 
 ### Interactive Image Selection
 

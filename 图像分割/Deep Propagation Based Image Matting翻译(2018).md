@@ -216,11 +216,11 @@ The training is carried out in an end-to-end (original image plus trimap to alph
 
 ### Dataset
 
-我们评估了DeepMattePropNet在两个matting任务上的表现，即基准alphamatting.com数据集[Rhemannet al.，2009]和我们自己的数据集。作为图像matting的基准挑战，alphamatting.com数据集可以在线提供原始图像和真实mattes（www.alphamatting.com）。**它包括27个用于训练的图像和8个用于测试的图像，并且每个图像都提供低分辨率trimap和高分辨率trimap**。我们在实验中仅使用更具挑战性的低分辨率三维图。
+我们评估了DeepMattePropNet在两个matting任务上的表现，即基准alphamatting.com数据集[Rhemannet al.，2009]和我们自己的数据集。作为图像matting的基准挑战，alphamatting.com数据集可以在线提供原始图像和真实mattes（www.alphamatting.com）。**它包括27个用于训练的图像和8个用于测试的图像，并且每个图像都提供低分辨率trimap和高分辨率trimap**。我们在实验中仅使用更具挑战性的低分辨率trimap。
 
 我们自己的数据集包括通过在显示室外场景的计算机监视器前拍摄46个目标对象而捕获的46个图像。为了获得它们的真实alpha matte，我们*首先在五个额外的恒定颜色背景前拍摄这些对象，然后通过使用奇异值求解组合方程的超定线性系统（如方程（1））来导出alphamatte分解（SVD）[Chuanget al。，2001]*。
 
-对于46个图像中的每一个，我们手动绘制一个低分辨率三元组。因此，我们有81个原始图像(46+27+8)，其中有真实alpha matte和低分辨率trimap。所有图像和三维图像都调整为600x800。我们还通过使用相应的真实alpha matte来合成新图像, 来增强这些原始图像。
+对于46个图像中的每一个，我们手动绘制一个低分辨率三元组。因此，我们有81个原始图像(46+27+8)，其中有真实alpha matte和低分辨率trimap。所有图像和trimap像都调整为600x800。我们还通过使用相应的真实alpha matte来合成新图像, 来增强这些原始图像。
 
 新的背景图像由从室内场景识别数据集[Quattoni和Torralba，2009]中随机选择的500个室内图像以及从Places数据集[Zhouetal。，2014]中随机选择的500个室外图像组成。所有室内和室外图像都调整为600x800。
 
