@@ -71,11 +71,11 @@ where the RGB color at pixel $i$, $I_i$, is known and the foreground color $F_i$
 
 In this work, we present an approach aimed to overcome these limitations. Our method uses deep learning to **directly compute the alpha matte given an input image and trimap**. Instead of relying primarily on color information, our network can **learn the natural structure that is present in alpha mattes**. For example, hair and fur (which usually require matting) possess strong structural and textural pat-terns. Other cases requiring matting (e.g. edges of objects, regions of optical or motion blur, or semitransparent regions) almost always have a common structure or alpha profile that can be expected. While low-level features will not capture this structure, deep networks are ideal for representing it. Our two-stage network includes **an encoder-decoder stage followed by a small residual network for refinement** and includes **a novel composition loss in addition to a loss on the alpha**. We are the first to demonstrate the ability to learn an alpha matte end-to-end given an image and trimap.
 
-在这项工作中，我们提出了一种旨在克服这些局限性的方法。我们的方法**使用深度学习来直接计算输入图像和trimap的alpha遮罩**。我们的网络**不是主要依赖于颜色信息，而是可以学习alpha遮罩中存在的自然结构**。例如，头发和毛皮（通常需要消光）具有强烈的结构和纹理图案。需要消光的其他情况（例如，物体的边缘，光学或运动模糊区域或半透明区域）几乎总是具有可以预期的共同结构或α文件。虽然低级功能无法捕获此结构，但深度网络非常适合表示它。我们的两阶段网络包括编码器-解码阶段，后面是一个小的残差网络，用于细化，**并且除了在alpha上的损失之外, 还包括新的成分损失**。我们是第一个展示能够在给定图像和trimap的情况下端到端的alpha遮罩的能力。
+在这项工作中，我们提出了一种旨在克服这些局限性的方法。我们的方法**使用深度学习来直接计算输入图像和trimap的alphamatte**。我们的网络**不是主要依赖于颜色信息，而是可以学习alphamatte中存在的自然结构**。例如，头发和毛皮（通常需要matting）具有强烈的结构和纹理图案。需要matting的其他情况（例如，物体的边缘，光学或运动模糊区域或半透明区域）几乎总是具有可以预期的共同结构或α文件。虽然低级功能无法捕获此结构，但深度网络非常适合表示它。我们的两阶段网络包括编码器-解码阶段，后面是一个小的残差网络，用于细化，**并且除了在alpha上的损失之外, 还包括新的成分损失**。我们是第一个展示能够在给定图像和trimap的情况下端到端的alphamatte的能力。
 
 To train a model that will excel in natural images of unconstrained scenes, we need a much larger dataset than currently available. Obtaining a ground truth dataset using the method of [25] would be very costly and cannot handle scenes with any degree of motion (and consequently cannot capture humans or animals). Instead, inspired by other synthetic datasets that have proven sufficient to train models for use in real images (e.g. [4]), we create a large-scale matting dataset using composition.
 
-为了训练一个在无约束场景的自然图像中表现优异的模型，我们需要一个比现有更大的数据集。使用[25]的方法获得真实标注数据集将是非常昂贵的，并且无法处理任何程度的运动场景（因此无法捕获人类或动物）。**相反，受其他合成数据集的启发，这些数据集已被证明足以训练模型以用于真实图像（例如[4]），我们使用合成创建了一个大规模的消光数据集**。
+为了训练一个在无约束场景的自然图像中表现优异的模型，我们需要一个比现有更大的数据集。使用[25]的方法获得真实标注数据集将是非常昂贵的，并且无法处理任何程度的运动场景（因此无法捕获人类或动物）。**相反，受其他合成数据集的启发，这些数据集已被证明足以训练模型以用于真实图像（例如[4]），我们使用合成创建了一个大规模的matting数据集**。
 
 Images with objects on simple backgrounds were carefully extracted and were composited onto new background images to create a dataset with 49300 training images and 1000 test images.
 
@@ -97,7 +97,7 @@ Current matting methods rely primarily on color to determine the alpha matte, al
 
 1. In sampling-based methods [3,9,32,13,28,16], **the known foreground and background regions are sampled to find candidate colors for a given pixel’s foreground and background**, then **a metric is used to determine the best foreground/background combination**.
 
-    使用不同的采样方法，包括沿最接近给定像素的边界采样[32]，基于光线投射的采样[13]，搜索整个边界[16]，或从颜色聚类采样[28,12](sampling along the boundary nearest the given pixel [32], sampling based on ray casting [13], searching the entire boundary [16], or sampling from color clusters [28,12])。在采样候选者中决定的度量几乎总是包括消光方程重建误差(a matting equation reconstruction error)，可能包括测量来自给定像素的样本的距离[32,16]或前景和背景样本的相似性[32,28]，以及包括稀疏编码[12]和KL-散度方法[19,18]的公式。而纹理[27]等高阶特征很少使用，效果有限。
+    使用不同的采样方法，包括沿最接近给定像素的边界采样[32]，基于光线投射的采样[13]，搜索整个边界[16]，或从颜色聚类采样[28,12](sampling along the boundary nearest the given pixel [32], sampling based on ray casting [13], searching the entire boundary [16], or sampling from color clusters [28,12])。在采样候选者中决定的度量几乎总是包括matting方程重建误差(a matting equation reconstruction error)，可能包括测量来自给定像素的样本的距离[32,16]或前景和背景样本的相似性[32,28]，以及包括稀疏编码[12]和KL-散度方法[19,18]的公式。而纹理[27]等高阶特征很少使用，效果有限。
 
 2. In propagation methods, Eq.1 is reformulated such that it allows **propagation of the alpha values from the known foreground and background regions into the unknown region**.
 
