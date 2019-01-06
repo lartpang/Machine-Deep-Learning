@@ -1,4 +1,4 @@
-# ML&DL&Linux&Python笔记
+# ML&DL笔记
 
 在cs231n笔记的基础上**进一步扩展**, 是我ML&DL学习总结的记录.
 
@@ -28,7 +28,9 @@
 
     编程能力是基石, 不可缺少, 这个不稳, 一切都不靠谱, 需要上手练练了, 之前只是看了下Faster/SSD的代码, 其他就没有详细读过了, 感觉应该仔细学习下tensorflow, 先从Cifar10的分类网络练手吧!
 
-    后续的代码的提交, 会在另一个仓库里更新
+* 2019年01月06日
+
+    最近在做显著性检测相关的学习, 主要在看一些分割和显著性的论文.
 
 <details>
 <summary>已读论文</summary>
@@ -55,18 +57,33 @@
     9. SSD
     10. HED(简单看了下)
     11. STN(简单看了下, 为了进一步了解可变形卷积)
+    12. DAG-RNN
+    13. SegNet
+    14. U-Net
 5. 2016
     1. Faster R-CNN
     2. YOLO-V2(简单看了下改进)
     3. FPN
     4. R-FCN
+    5. Automatic Portrait Segmentation for Image Stylization
+    6. Deep Automatic Portrait Matting(0)
+    7. DeepLabv2
+    8. DHSNet
+    9. RFCN(Saliency)
+    10. PSPNet
+    11. RefineNet
 6. 2017
     1. SeNet
     2. DenseNet
     3. SqueezeNet
     4. Deformable ConvNet
+    5. Deep Image Matting
 7. 2018
     1. YOLO-V3(简单看了下改进)
+    2. Deep Propagation Based Image Matting
+    3. Dense DAG-RNN
+    4. Semantic Human Matting
+    5. UNet++(简单看了下思路)
 
 </details>
 
@@ -102,11 +119,7 @@ CS231n课程笔记的翻译, 始于@杜客在一次回答问题“应该选择Te
 
 > 感谢对于CS231n的笔记的翻译.
 
-## 关于Linux相关知识
-
-Ubuntu 18.04 LTS
-
-Linux新手, 总是遇到各种问题, 希望收集起来, 可以作为一个知识的积累.
+~~## 关于Linux相关知识~~ 这部分内容已经转移到了另一个仓库 [LinuxNote](https://github.com/lartpang/LinuxNote)
 
 ## 关于Python
 
