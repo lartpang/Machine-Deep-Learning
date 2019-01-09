@@ -5,6 +5,14 @@
 * SD: Saliency Detection
 * ZSL: Zero-Shot Learning
 
+关键内容:
+
+* 没有训练直接将图像映射到标签中的DNN。相反，将DNN拟合为一个嵌入函数，以**将像素和显著/背景区域的属性映射到度量空间**。显着/背景区域的属性被映射为度量空间中的锚点。然后，**在该空间中构造最近邻（NN）分类器，将最近的锚点的标签分配给对应的像素**.
+* 保持分辨率的手段:
+  1. 移除了最后两个卷积块的池化层, 使用扩张卷积来维持卷积滤波器的感受野
+  2. 添加亚像素卷积层到每个VGG特征提取器的卷积块后, 来上采样每个卷积块的特征图到输入图像大小.
+* 使用了迭代训练/测试的策略.
+
 ## Abstract
 
 The categories and appearance of salient objects varyfrom image to image, therefore, saliency detection is animage-specific task.  Due to lack of large-scale saliency training data, using deep neural networks (DNNs) with pre-training is difficult to precisely capture the image-specific saliency cues. To solve this issue, we formulate a **zero-shot learning** problem to promote existing saliency detectors.
@@ -58,7 +66,7 @@ Extensive experiments on five data sets showthat our method significantly improv
 1. 预训练任务与SD的差异: 由预先训练的特征提取器产生的特征假定用于所有图像。例如，标志和人是图1第一列中的显着对象，而它们属于第二列中的背景。然而，在两列的特征图中不加区分地突出了标志和人的区域。使用这种特征提取器，可以强制预测模型学习将相似特征映射到相反标签，这对于小训练数据集来说是困难的。
 2. 显着对象的类别和外观因图像而异，而小的训练数据不足以捕捉多样性. 例如，图1中所示的六个显着对象来自六个不同的类别，并且它们的外观差别很大。因此，可能很难学习统一的检测器来处理各种显着对象。
 
-考虑到显着对象的多样性，我们没有训练直接将图像映射到标签中的深度神经网络（DNN）。相反，我们将DNN训练为一个联合函数，以将像素和显著/背景区域的属性映射到度量空间。显着/背景区域的属性被映射为度量空间中的锚点。然后，在该空间中构造最近邻（NN）分类器，将最近的锚点的标签分配给对应的像素。
+考虑到显着对象的多样性，我们没有训练直接将图像映射到标签中的深度神经网络（DNN）。相反，我们将DNN训练为一个嵌入函数，以将像素和显著/背景区域的属性映射到度量空间。显着/背景区域的属性被映射为度量空间中的锚点。然后，在该空间中构造最近邻（NN）分类器，将最近的锚点的标签分配给对应的像素。
 
 作为非参数模型，NN分类器可以很好地适应新数据并处理显着对象的多样性。另外，由于分类任务是由NN分类器执行的，因此DNN的目标转向学习从显着/背景区域的属性到嵌入空间中的锚点的一般映射。与直接学习检测不同的显着对象相比，网络更容易学习有限的数据.
 
