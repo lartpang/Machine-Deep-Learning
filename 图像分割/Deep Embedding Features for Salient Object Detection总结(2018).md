@@ -12,6 +12,18 @@
   1. 移除了最后两个卷积块的池化层, 使用扩张卷积来维持卷积滤波器的感受野
   2. 添加亚像素卷积层到每个VGG特征提取器的卷积块后, 来上采样每个卷积块的特征图到输入图像大小.
 * 使用了迭代训练/测试的策略.
+  * 这里没有提到训练迭代次数如何确定
+  * 测试的迭代次数是人工给定的
+
+一些想法:
+
+类似于R3Net, 最后的添加的结构都是反复迭代测试后才确定使用多少次, 而且按照相关的测试可以看出来, 一定次数后, 提升的效果就趋于饱和了, 只能说这里的提到的方法对于现有网络的提升具有一定的助益.
+
+对于这里提到的, 这是类似于一种ZSL的方法, 也就是利用现有的SD算法产生的结果("过去的知识"), 添加的新结构, 不断利用过去的知识迭代, 实现对于最终"后处理"后结果的一个促进("来对现有的SD算法进行推广").
+
+如何将这个方法应用到现有的架构呢? **如何改造现有架构**?
+
+改造后的结构, 训练的时候也要按照文中那样, 随机翻转真值中的像素标签么?
 
 ## Abstract
 
@@ -180,13 +192,13 @@ We assume that in the embedding space, all pixels of an image cluster around the
 
 但是这里要注意, 对于锚点而言, 是使用真实标注来转化生成的, 所以在测试的时候, 就得考虑如何处理了. 这里使用的是利用生成的显著性图来进行生成anchors, 这是不准确的.
 
-为了匹配训练和测试条件, 但是又不能改动测试的真值, 只能对训练的流程进行改进. 在训练期间, 当生成anchors时, 以概率p随机翻转每一个像素的标签. 这种处理额外带来的一个好处是, 一定程度上增加了训练样本的多样性, 有一定的抗过拟合的作用.
+为了匹配训练和测试条件, 但是又不能改动测试的真值, 只能对训练的流程进行改进. **在训练期间, 当生成anchors时, 以概率p随机翻转每一个像素的标签**. 这种处理额外带来的一个好处是, 一定程度上增加了训练样本的多样性, 有一定的抗过拟合的作用.
 
 下面是算法的流程
 
 ![img](assets/2019-01-09-16-45-19.png)
 
-训练需要迭代, 迭代的过程, 就是不断的随机翻转标签, 计算像素和区域锚点的映射向量, 最大化对数似然, 更新参数.
+训练需要迭代, 迭代的过程, 就是不断的随机翻转标签, 计算像素和区域锚点的映射向量, 最大化对数似然, 更新参数. 注意上图中真值使用的方法.
 
 ### Iterative testing scheme
 
@@ -204,7 +216,13 @@ We assume that in the embedding space, all pixels of an image cluster around the
 
 上图展示了提出的方法对于显著性图的不断的优化提升的过程.
 
-这个过程实际上就是先对像素映射向量, 然后开始迭代, 最开始的先验使用的是现有方法生成的显著性图, 也就是$Y^{0}$, 利用先验图选择前景背景, 进而生成近似的锚点, 根据公式3, 对每个像素计算其显著性值(也就是属于显著性区域的概率值), 来构建另一个新的显著性图, 利用迭代公式进行迭代计算. 要注意, 这里的迭代次数T是给定的.(这就有点不智能了)
+这个过程实际上就是先对像素映射向量, 然后开始迭代, 最开始的先验使用的是现有方法生成的**显著性图**, 也就是$Y^{0}$, 利用先验图选择前景背景, 也就是下图中的位置, 进而生成近似的锚点(利用先验图作为类似训练时的真值, 与从网络中提取出来的特征层相乘(实际上是选择了前景与背景区域之后)在送入区域嵌入结构生成锚点).
+
+![img](assets/2019-01-10-10-55-11.png)
+
+根据公式3, 对每个像素计算其显著性值(也就是属于显著性区域的概率值), 来构建另一个新的显著性图, 利用迭代公式进行迭代计算(相当于是d位置与i位置显著图的合并). 之后按照上图那样送入结构中.
+
+要注意, 这里的迭代次数T是给定的.(这就有点不智能了)
 
 尽管初始的显著性图没能准确的区分出来前景和背景, 但是它通常能部分的区分它们, 因此可以提供关于图像中显著性目标的类别和外观的信息.
 
@@ -249,7 +267,7 @@ We assume that in the embedding space, all pixels of an image cluster around the
 
 通过在五个卷积块后添加一个亚像素卷积层, 这里会获取5个C通道的特征图, 5个特征图级联, 想成一个5C通道的特征图. 但是直接使用和这个级联的特征图不是最好的选择, 因为不同的卷积块之间有着不同的感受野(区域不同), 为了解决这个问题, 额外添加了两个卷积层来转化这个级联特征图为一个D通道的特征图(特征融合), 其中的每个D维向量就被认为是每个像素所对应的的D维表示.
 
-文中的实现里, 设定C为64, D为512.
+**文中的实现里, 设定C为64, D为512.**
 
 ### Region embedding
 
@@ -307,10 +325,10 @@ MAE indicates how similar a saliency map is compared to the ground truth. It is 
 
 * We train our model on the training set of DUTS dataset.
 * As in [20], we augment the training data by horizontal flipping and cropping the images to reduce overfitting.
-* The probability $p$ of randomly flipping ground truth when producing anchors during training is set to 0.05.
+* The probability $p$ of randomly flipping ground truth when producing anchors during training is **set to 0.05**.
 * We comparetwo type of region embedding in Sec.4.4, and **adopt theConv-based one in other experiments**.
 * **Adam [14] optimization method** is used for training our model.
-* Learning rateis set to 1e-3.
+* Learning rateis **set to 1e-3**.
 * We **do not use a validation set**, and train our model **until its training loss converges**.
 * The training process takes almost 16 hours and converges after around 300 kiterations with mini-batch of size 1.
 
