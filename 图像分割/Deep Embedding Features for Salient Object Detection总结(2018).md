@@ -12,7 +12,7 @@
   1. 移除了最后两个卷积块的池化层, 使用扩张卷积来维持卷积滤波器的感受野
   2. 添加亚像素卷积层到每个VGG特征提取器的卷积块后, 来上采样每个卷积块的特征图到输入图像大小.
 * 使用了迭代训练/测试的策略.
-  * 这里没有提到训练迭代次数如何确定
+  * ~~这里没有提到训练迭代次数如何确定~~, 懵逼了, 这里就是实际的代码中的训练迭代次数
   * 测试的迭代次数是人工给定的
 
 一些想法:
@@ -21,9 +21,15 @@
 
 对于这里提到的, 这是类似于一种ZSL的方法, 也就是利用现有的SD算法产生的结果("过去的知识"), 添加的新结构, 不断利用过去的知识迭代, 实现对于最终"后处理"后结果的一个促进("来对现有的SD算法进行推广").
 
+一些疑惑:
+
 如何将这个方法应用到现有的架构呢? **如何改造现有架构**?
 
 改造后的结构, 训练的时候也要按照文中那样, 随机翻转真值中的像素标签么?
+
+![img](assets/2019-01-10-12-26-05.png)
+
+这里的第6层是哪里来的?是前面的5C通道的特征输出汇总来的?
 
 ## Abstract
 
@@ -244,6 +250,49 @@ We assume that in the embedding space, all pixels of an image cluster around the
 
 1. 移除了最后两个卷积块的池化层, 使用扩张卷积来维持卷积滤波器的感受野
 2. 添加亚像素卷积层到每个VGG特征提取器的卷积块后, 来上采样每个卷积块的特征图到输入图像大小.
+
+> 要注意, 这里实际上最后剩下来的只有两个最大池化, 可见代码:
+
+```python
+self.proc_feats_list = nn.ModuleList([
+    # convtranspose2d=>out_size=(in_size-1)xstride-2xpadding+kernel_size
+    nn.Sequential(
+        # x4 512卷积块对应的输出
+        nn.ConvTranspose2d(dims[0], dims[0], 8, 4, 2),
+        nn.Conv2d(dims[0], odims[0], kernel_size=3, padding=1)),
+    nn.Sequential(
+        # x4 512对应的输出
+        nn.ConvTranspose2d(dims[1], dims[1], 8, 4, 2),
+        nn.Conv2d(dims[1], odims[1], kernel_size=3, padding=1)),
+    nn.Sequential(
+        # x4 256对应的输出
+        nn.ConvTranspose2d(dims[2], dims[2], 8, 4, 2),
+        nn.Conv2d(dims[2], odims[2], kernel_size=3, padding=1)),
+    nn.Sequential(
+        # x2 128对应的输出
+        nn.ConvTranspose2d(dims[3], dims[3], 4, 2, 1),
+        nn.Conv2d(dims[3], odims[3], kernel_size=3, padding=1)),
+
+    # 使用亚像素卷积实现上采样 #############################################
+    # 不清楚这里为什么放弃了使用亚像素卷积的手段
+    # 这里的nn.PixelShuffle(up_scale)便是可以用来实现亚像素卷积的一个类
+    # nn.Sequential(
+    #     nn.Conv2d(dims[0], odims[0], kernel_size=3, padding=1),
+    #     nn.PixelShuffle(4)),
+    # nn.Sequential(
+    #     nn.Conv2d(dims[1], odims[1], kernel_size=3, padding=1),
+    #     nn.PixelShuffle(4)),
+    # nn.Sequential(
+    #     nn.Conv2d(dims[2], odims[2], kernel_size=3, padding=1),
+    #     nn.PixelShuffle(4)),
+    # nn.Sequential(
+    #     nn.Conv2d(dims[3], odims[3], kernel_size=3, padding=1),
+    #     nn.PixelShuffle(2)),
+
+    # x1 64 对应的输出
+    nn.Conv2d(dims[4], dims[4], kernel_size=3, padding=1),
+])
+```
 
 > **Subpixel convolution** is an upsampling strategy originally proposed in [Real-time single im-age and video super-resolution using an efficient sub-pixelconvolutional neural network] for image super-resolution.
 >
