@@ -125,25 +125,78 @@ Dosovitskiy等人在无监督特征学习的范围内已经证明了学习不变
 
 ## 一些想法
 
-* 运算: 这里使用的是valid卷积, 理由是:
+### 运算
 
-    > 这样的话可以保证分割的结果都是基于没有缺失的上下文特征得到的
-    >
-    > 而且这里的结构也使得可以适用于大图像的实际上是有互有重叠的patch部分, 这样可以考虑更多的上下文信息, 所以一定的剪裁也是可以的.
+这里使用的是valid卷积, 理由是:
 
-    若是使用了same卷积, 是有可能保证分割的结果基于有缺失的上下文特征得到, 但是这样的结果会如何呢? 不见得坏吧...
+> 这样的话可以保证分割的结果都是基于没有缺失的上下文特征得到的
+>
+> 而且这里的结构也使得可以适用于大图像的实际上是有互有重叠的patch部分, 这样可以考虑更多的上下文信息, 所以一定的剪裁也是可以的.
 
-     ~~而且这样的结果可以保证扩展阶段可以直接使用复制过来的收缩阶段的特征图, 而不用进行裁剪,~~ 后期的裁剪这个操作也会损失一定的信息吧? 是否有办法既可以像这样的使用patch作为输入的时候, 考虑上下文信息, 又可以不通过这样的剪裁的方式融合呢?
+若是使用了same卷积, 是有可能保证分割的结果基于有缺失的上下文特征得到, 但是这样的结果会如何呢? 不见得坏吧...
 
-* 组合: 这里的是直接复制过来并进行的剪裁, 可否通过放缩进行合并呢?
+~~而且这样的结果可以保证扩展阶段可以直接使用复制过来的收缩阶段的特征图, 而不用进行裁剪,~~ 后期的裁剪这个操作也会损失一定的信息吧? 是否有办法既可以像这样的使用patch作为输入的时候, 考虑上下文信息, 又可以不通过这样的剪裁的方式融合呢?
 
-* 组合: 这里的是上采样所得通道数直接减半, 那么是否可以通过卷积压缩一半的通道呢?
+### 组合
 
-* 连接: 这里是通过串联的形式连接, 与DenseNet的形式是一致的, 那是否可以如同ResNet的那样, 按通道加和呢?
+* 这里的是直接复制过来并进行的剪裁, 可否通过放缩进行合并呢?
+* 这里的是上采样所得通道数直接减半, 那么是否可以通过卷积压缩一半的通道呢?
 
-    * FCN就是加和的形式
+### 连接
+
+这里是通过串联的形式连接, 与DenseNet的形式是一致的, 那是否可以如同ResNet的那样, 按通道加和呢? FCN就是加和的形式
+
+### 拼接
+
+对于输入进行padding为切割块的整数倍, 切割patch送入网络, 进行预测. 输出拼接.
+
+这里需要思考一下怎么预测整张遥感图像。我们知道，我们训练模型时选择的图片输入是256×256，所以我们预测时也要采用256×256的图片尺寸送进模型预测。现在我们要考虑一个问题，我们该怎么将这些预测好的小图重新拼接成一个大图呢？这里给出一个最基础的方案：先给大图做padding 0操作，得到一副padding过的大图，把图像的尺寸补齐为256的倍数img_padding，然后以256为步长切割大图，依次将切出来的小图送进模型预测，预测好的小图则放在img_padding的相应位置上，依次进行，最终得到预测好的整张大图（即img_padding），再做图像切割，**切割成原先图片的尺寸**，完成整个预测流程。
+
+```python
+def predict(args):
+    # load the trained convolutional neural network
+    print("[INFO] loading network...")
+    model = load_model(args["model"])
+    stride = args['stride']
+    for n in range(len(TEST_SET)):
+        path = TEST_SET[n]
+        #load the image
+        image = cv2.imread('./test/' + path)
+        # pre-process the image for classification
+        #image = image.astype("float") / 255.0
+        #image = img_to_array(image)
+        h,w,_ = image.shape
+        padding_h = (h//stride + 1) * stride
+        padding_w = (w//stride + 1) * stride
+        padding_img = np.zeros((padding_h,padding_w,3),dtype=np.uint8)
+        padding_img[0:h,0:w,:] = image[:,:,:]
+        padding_img = padding_img.astype("float") / 255.0
+        padding_img = img_to_array(padding_img)
+        print 'src:',padding_img.shape
+        mask_whole = np.zeros((padding_h,padding_w),dtype=np.uint8)
+        for i in range(padding_h//stride):
+            for j in range(padding_w//stride):
+                crop = padding_img[:3,i*stride:i*stride+image_size,j*stride:j*stride+image_size]
+                _,ch,cw = crop.shape
+                if ch != 256 or cw != 256:
+                    print 'invalid size!'
+                    continue
+
+                crop = np.expand_dims(crop, axis=0)
+                #print 'crop:',crop.shape
+                pred = model.predict_classes(crop,verbose=2)
+                pred = labelencoder.inverse_transform(pred[0])
+                #print (np.unique(pred))
+                pred = pred.reshape((256,256)).astype(np.uint8)
+                #print 'pred:',pred.shape
+                mask_whole[i*stride:i*stride+image_size,j*stride:j*stride+image_size] = pred[:,:]
+
+
+        cv2.imwrite('./predict/pre'+str(n+1)+'.png',mask_whole[0:h,0:w])
+```
 
 ## 参考链接
 
-* https://blog.csdn.net/jianyuchen23/article/details/79349694
-* 深入理解深度学习分割网络Ｕnet——U-Net: Convolutional Networks for Biomedical Image Segmentation https://blog.csdn.net/Formlsl/article/details/80373200
+* <https://blog.csdn.net/jianyuchen23/article/details/79349694>
+* 深入理解深度学习分割网络Ｕnet——U-Net: Convolutional Networks for Biomedical Image Segmentation: <https://blog.csdn.net/Formlsl/article/details/80373200>
+* 【Keras】基于SegNet和U-Net的遥感图像语义分割: <https://www.cnblogs.com/skyfsm/p/8330882.html>
