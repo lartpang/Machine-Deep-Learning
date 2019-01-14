@@ -1,5 +1,22 @@
 # Scene Parsing via Dense Recurrent Neural Networks with Attentional Selection(2018)
 
+* [Scene Parsing via Dense Recurrent Neural Networks with Attentional Selection(2018)](#scene-parsing-via-dense-recurrent-neural-networks-with-attentional-selection2018)
+  * [文章要点](#文章要点)
+    * [计算流程改进](#计算流程改进)
+      * [相关参数的定义](#相关参数的定义)
+      * [原本密集RNN的计算流程](#原本密集rnn的计算流程)
+      * [考虑注意力模型](#考虑注意力模型)
+      * [集成到整体后的密集RNN](#集成到整体后的密集rnn)
+  * [实际效果](#实际效果)
+    * [基线比较](#基线比较)
+    * [在PASCAL Context上的结果比较](#在pascal-context上的结果比较)
+    * [在MIT ADE20K上的结果比较](#在mit-ade20k上的结果比较)
+    * [对于Cityscopes上的结果比较](#对于cityscopes上的结果比较)
+  * [消融实验](#消融实验)
+  * [模型复杂度研究](#模型复杂度研究)
+  * [总结](#总结)
+  * [参考](#参考)
+
 ## 文章要点
 
 1. 使用无向有环图对图像进行建模, 并使用密集连接改进

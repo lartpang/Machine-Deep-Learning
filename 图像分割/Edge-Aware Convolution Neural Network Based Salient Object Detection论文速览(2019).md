@@ -2,6 +2,15 @@
 
 > Wenlong Guan, Tiantian Wang, Jinqing Qi, Lihe Zhang and Huchuan Lu, Edge-Aware Convolution Neural Network Based Salient Object Detection, IEEE Signal Processing Letters, Vol. 26, No. 1, P114-118,2019 [PDF(baidu)](https://pan.baidu.com/s/1RsgfISTe7MHprUtwtvYbvQ) [PDF(google)](https://drive.google.com/file/d/1vF4HqiKE7iapWPPmzvttbrz68PEspMuB/view?usp=sharing)
 
+* [Edge-Aware Convolution Neural Network Based Salient Object Detection](#edge-aware-convolution-neural-network-based-salient-object-detection)
+  * [概要](#概要)
+  * [架构解释](#架构解释)
+    * [整体结构](#整体结构)
+    * [解码器结构](#解码器结构)
+    * [测试结果](#测试结果)
+      * [量化比较](#量化比较)
+      * [消融实验](#消融实验)
+
 ## 概要
 
 近年来，目标检测受到了广泛的关注。在这篇论文中，提出了一种新颖的目标检测算法，该算法将全局信息信息与低级边缘特征相结合。

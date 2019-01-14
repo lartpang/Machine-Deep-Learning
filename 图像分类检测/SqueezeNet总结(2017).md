@@ -4,6 +4,27 @@
 
 论文参考: https://arxiv.org/abs/1602.07360
 
+* [SqueezeNet(2017)](#squeezenet2017)
+  * [架构](#架构)
+    * [AlexNet](#alexnet)
+    * [SqueezeNet](#squeezenet)
+    * [Fire module](#fire-module)
+  * [结构效果](#结构效果)
+  * [论文动机](#论文动机)
+    * [概述](#概述)
+    * [相关的工作](#相关的工作)
+      * [模型压缩](#模型压缩)
+      * [CNN MICROARCHITECTURE](#cnn-microarchitecture)
+      * [CNN MACROARCHITECTURE](#cnn-macroarchitecture)
+      * [NEURAL NETWORK DESIGN SPACE EXPLORATION](#neural-network-design-space-exploration)
+  * [结构探索](#结构探索)
+    * [微结构设计空间探索](#微结构设计空间探索)
+      * [微结构元参数](#微结构元参数)
+      * [挤压比](#挤压比)
+      * [权衡1X1和3X3滤波器](#权衡1x1和3x3滤波器)
+    * [宏框架设计空间探索](#宏框架设计空间探索)
+  * [结论](#结论)
+
 ## 架构
 
 > 我们在本文的主要目标是确定具有很少参数却同时保持有竞争性的精度的CNN架构. 为了实现这一点, 我们在设计CNN架构时采用了**三个主要策略**：

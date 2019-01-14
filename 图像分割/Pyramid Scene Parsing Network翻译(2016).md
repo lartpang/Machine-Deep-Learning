@@ -1,5 +1,21 @@
 # Pyramid Scene Parsing Network(2016)
 
+* [Pyramid Scene Parsing Network(2016)](#pyramid-scene-parsing-network2016)
+  * [概要](#概要)
+  * [引言](#引言)
+  * [相关工作](#相关工作)
+  * [Pyramid Scene Parsing Network](#pyramid-scene-parsing-network)
+    * [重要观察](#重要观察)
+      * [匹配关系](#匹配关系)
+      * [混淆类别](#混淆类别)
+      * [不显眼的类别](#不显眼的类别)
+      * [观察总结](#观察总结)
+    * [Pyramid Pooling Module](#pyramid-pooling-module)
+    * [Network Architecture](#network-architecture)
+  * [Deep Supervision for ResNet-Based FCN](#deep-supervision-for-resnet-based-fcn)
+  * [实验](#实验)
+  * [总结](#总结)
+
 ## 概要
 
 场景解析对于不受限制的开放式场景和多样化场景具有挑战性. 在本文中, 通过金字塔池化模块以及提出的金字塔场景解析网络（PSPNet）实现的, 通过基于不同区域的上下文聚合来利用全局上下文信息.

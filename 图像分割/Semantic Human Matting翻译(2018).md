@@ -2,6 +2,39 @@
 
 > <http://arxiv.org/abs/1809.01354v1>
 
+* [Semantic Human Matting](#semantic-human-matting)
+  * [Abstract](#abstract)
+  * [Introduction](#introduction)
+  * [Related works](#related-works)
+    * [semantic segmentation](#semantic-segmentation)
+    * [image matting methods](#image-matting-methods)
+    * [automatic matting system](#automatic-matting-system)
+  * [Human matting dataset](#human-matting-dataset)
+  * [Our method](#our-method)
+    * [Trimap generation: T-Net](#trimap-generation-t-net)
+    * [Matting network: M-Net](#matting-network-m-net)
+    * [Fusion Module](#fusion-module)
+    * [Loss](#loss)
+    * [Implementation Detail](#implementation-detail)
+      * [T-Net pre-train](#t-net-pre-train)
+      * [M-Net pre-train](#m-net-pre-train)
+      * [End-to-end training](#end-to-end-training)
+      * [Testing](#testing)
+  * [Experiments](#experiments)
+    * [Experimental Setup](#experimental-setup)
+      * [Dataset](#dataset)
+      * [Measurement](#measurement)
+      * [Baselines](#baselines)
+    * [Performance Comparison](#performance-comparison)
+    * [Automatic Method vs. Interactive Methods](#automatic-method-vs-interactive-methods)
+    * [Evaluation and Analysis of Different Components](#evaluation-and-analysis-of-different-components)
+      * [The Effect of End-to-end Training](#the-effect-of-end-to-end-training)
+      * [The Evaluation of Fusion Module](#the-evaluation-of-fusion-module)
+      * [The Effect of Constraint Lt](#the-effect-of-constraint-lt)
+      * [Visualization of Intermediate Results](#visualization-of-intermediate-results)
+    * [Applying to real images](#applying-to-real-images)
+  * [Conclusion](#conclusion)
+
 ## Abstract
 
 Human matting, high quality extraction of humans from natural images, is crucial for a wide variety of applications. Since the matting problem is severely under-constrained, most previous methods require user interactions to take user designated trimaps or scribbles as constraints. This user-in-the-loop nature makes them difficult to be applied to large scale data or time-sensitive scenarios. In this paper, instead of using explicit user input constraints, we employ implicit semantic constraints learned from data and propose an automatic human matting algorithm Semantic Human Matting (SHM).

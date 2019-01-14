@@ -2,6 +2,28 @@
 
 > 论文: <https://www.ijcai.org/proceedings/2018/0139.pdf>
 
+* [Deep Propagation Based Image Matting](#deep-propagation-based-image-matting)
+  * [概要](#概要)
+  * [引言](#引言)
+  * [Related Work](#related-work)
+  * [Method](#method)
+    * [Deep Feature Extraction Module](#deep-feature-extraction-module)
+    * [Affinity Learning Module](#affinity-learning-module)
+    * [Matte Propagation Module](#matte-propagation-module)
+    * [Losses](#losses)
+    * [Implementation Detail](#implementation-detail)
+  * [Experimental Results](#experimental-results)
+    * [Dataset](#dataset)
+    * [Evaluation](#evaluation)
+  * [Conclusion](#conclusion)
+  * [重要参考](#重要参考)
+    * [论文](#论文)
+    * [拉普拉斯矩阵](#拉普拉斯矩阵)
+      * [介绍](#介绍)
+      * [定义](#定义)
+      * [性质](#性质)
+      * [例子](#例子)
+
 ## 概要
 
 在本文中，我们通过将深度学习引入学习alpha matte传播原理, 来提出一种基于深度传播的图像matting框架。我们的深度学习架构是深度特征提取模块，亲和力学习模块(an affinity learning module)和matte传播模块的串联。这三个模块都是不同的，可以通过端到端的训练流程进行共同优化。我们的框架通过学习适合于matte传播的深度图像表示，对于传播而言, 生成在像素的语义级别的成对相似性。它结合了深度学习和matte传播的强大功能，因此可以在准确性和训练复杂性方面超越先前最先进的matting技术，这可以通过我们基于两个基准matting数据集创建的243K图像上的实验结果得到验证.

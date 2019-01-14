@@ -2,6 +2,29 @@
 
 > 论文: <https://arxiv.org/abs/1503.02531v1>
 
+* [Distilling the Knowledge in a Neural Network](#distilling-the-knowledge-in-a-neural-network)
+  * [Abstract](#abstract)
+  * [Introduction](#introduction)
+  * [Distillation](#distillation)
+    * [Matching logits is a special case of distillation](#matching-logits-is-a-special-case-of-distillation)
+  * [Preliminary experiments on MNIST](#preliminary-experiments-on-mnist)
+  * [Experiments on speech recognition](#experiments-on-speech-recognition)
+    * [Results](#results)
+  * [Training ensembles of specialists on very big datasets](#training-ensembles-of-specialists-on-very-big-datasets)
+    * [The JFT dataset](#the-jft-dataset)
+    * [Specialist Models](#specialist-models)
+    * [Assigning classes to specialists](#assigning-classes-to-specialists)
+    * [Performing inference with ensembles of specialists](#performing-inference-with-ensembles-of-specialists)
+    * [Results](#results-1)
+  * [Soft Targets as Regularizers](#soft-targets-as-regularizers)
+    * [Using soft targets to prevent specialists from overfitting](#using-soft-targets-to-prevent-specialists-from-overfitting)
+  * [Relationship to Mixtures of Experts](#relationship-to-mixtures-of-experts)
+  * [Discussion](#discussion)
+  * [补充内容](#补充内容)
+    * [triphone](#triphone)
+  * [梅尔刻度(Mel-scale)](#梅尔刻度mel-scale)
+  * [参考链接](#参考链接)
+
 知识蒸馏（Knowledge Distilling）是模型压缩的一种方法，是指利用已经训练的一个较复杂的Teacher模型，指导一个较轻量的Student模型训练，从而在减小模型大小和计算资源的同时，尽量保持原Teacher模型的准确率的方法。这种方法受到大家的注意，主要是由于Hinton的论文Distilling the Knowledge in a Neural Network。
 
 @Naiyan Wang

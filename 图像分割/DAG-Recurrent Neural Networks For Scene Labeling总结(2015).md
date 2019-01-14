@@ -4,6 +4,25 @@
 >
 > 这里应该指的是在CNN提取到的特征图上进行使用RNN.
 
+* [DAG-Recurrent Neural Networks For Scene Labeling(2015)](#dag-recurrent-neural-networks-for-scene-labeling2015)
+  * [关键点](#关键点)
+  * [简介](#简介)
+  * [相关工作](#相关工作)
+  * [网络结构](#网络结构)
+    * [DAG-RNN计算](#dag-rnn计算)
+    * [整体DAG-RNN](#整体dag-rnn)
+    * [损失函数](#损失函数)
+    * [处理类别不平衡](#处理类别不平衡)
+  * [测试](#测试)
+    * [基线模型](#基线模型)
+    * [实验使用的基本网络](#实验使用的基本网络)
+    * [SiftFlow Dataset](#siftflow-dataset)
+    * [CamVid Dataset](#camvid-dataset)
+    * [Barcelona Dataset](#barcelona-dataset)
+    * [Effects of DAG-RNNs to Per-class Accuracy](#effects-of-dag-rnns-to-per-class-accuracy)
+    * [Discussion of Modeled Dependency](#discussion-of-modeled-dependency)
+  * [总结](#总结)
+
 ## 关键点
 
 * 引入RNN来利用长期上下文依赖

@@ -1,5 +1,23 @@
 # GoogLeNet(InceptionV1)(2014)
 
+* [GoogLeNet(InceptionV1)(2014)](#googlenetinceptionv12014)
+  * [前言](#前言)
+  * [概要](#概要)
+  * [新意](#新意)
+      * [Inception module](#inception-module)
+      * [Bottleneck layer](#bottleneck-layer)
+      * [辅助分类器](#辅助分类器)
+  * [构思](#构思)
+  * [架构](#架构)
+      * [结构参数表](#结构参数表)
+      * [完整网络架构图](#完整网络架构图)
+      * [附加网络结构](#附加网络结构)
+  * [实践](#实践)
+    * [ILSVRC 2014分类挑战赛](#ilsvrc-2014分类挑战赛)
+    * [ILSVRC 2014检测挑战赛](#ilsvrc-2014检测挑战赛)
+  * [结论](#结论)
+  * [代码](#代码)
+
 ## 前言
 
 2014年, 在google工作的Christian Szegedy为了找到一个深度神经网络结构**能够有效地减少计算资源**, 于是有了这个[GoogleNet](https://arxiv.org/abs/1409.4842)了（也叫做Inception V1）.

@@ -2,6 +2,32 @@
 
 > 论文: <https://arxiv.org/abs/1708.04366>
 
+* [Deep Edge-Aware Saliency Detection](#deep-edge-aware-saliency-detection)
+  * [摘要](#摘要)
+  * [前言](#前言)
+    * [Low-resolution output maps](#low-resolution-output-maps)
+    * [Missing handcrafted yet pivotal features:](#missing-handcrafted-yet-pivotal-features)
+    * [Archaic handling of multi-scale saliency:](#archaic-handling-of-multi-scale-saliency)
+    * [提出的方法](#提出的方法)
+  * [Joint Salient Edge and Saliency Detection](#joint-salient-edge-and-saliency-detection)
+    * [Reformulating Saliency Detection](#reformulating-saliency-detection)
+    * [Balanced Loss Function](#balanced-loss-function)
+    * [FCN for Edge-Aware Saliency](#fcn-for-edge-aware-saliency)
+    * [Effects of Reformulating Saliency Detection](#effects-of-reformulating-saliency-detection)
+  * [Integrating Deep and Handcrafted Features](#integrating-deep-and-handcrafted-features)
+    * [Handcrafted Saliency Features](#handcrafted-saliency-features)
+    * [Deep Multi-scale Saliency Feature Extraction](#deep-multi-scale-saliency-feature-extraction)
+    * [Deep-Shallow Model](#deep-shallow-model)
+    * [Context Module for Saliency Refinement](#context-module-for-saliency-refinement)
+  * [Experimental Results](#experimental-results)
+    * [Evaluation metrics](#evaluation-metrics)
+    * [消融实验](#消融实验)
+      * [数据集的不同](#数据集的不同)
+      * [Salient objects with diverse scales](#salient-objects-with-diverse-scales)
+      * [Different numbers of salient objects](#different-numbers-of-salient-objects)
+    * [执行时间](#执行时间)
+  * [Conclusions](#conclusions)
+
 ## 摘要
 
 由于深度学习架构，视觉显着性已经取得了长足的进步，然而，仍存在三个主要挑战，这些挑战阻碍了具有复杂构图，多个显着对象和不同尺度的显着对象的场景的检测性能。特别是，现有方法的输出图仍然保持较低的空间分辨率，由于步幅和汇集操作导致边缘模糊，网络经常忽略描述性统计和有可能补充显着性检测结果手工制作的先验，并且不同层次的深层特征主要保持不变, 等待被有效融合来处理多尺度显着对象。
