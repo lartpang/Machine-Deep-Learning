@@ -24,6 +24,28 @@
 
 ---
 
+* [DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs(2016)](#deeplab-semantic-image-segmentation-with-deep-convolutional-nets-atrous-convolution-and-fully-connected-crfs2016)
+  * [摘要](#摘要)
+  * [介绍](#介绍)
+    * [特征分辨率的下降 => atrous convolution](#特征分辨率的下降--atrous-convolution)
+    * [多尺度目标共存问题 => Atrous Spatial Pyramid Pooling (ASPP)](#多尺度目标共存问题--atrous-spatial-pyramid-pooling-aspp)
+    * [DCNN的不变形导致定位精度降低 => Conditional Random Field (CRF)](#dcnn的不变形导致定位精度降低--conditional-random-field-crf)
+  * [模型结构](#模型结构)
+  * [相关工作](#相关工作)
+    * [hand-crafted features](#hand-crafted-features)
+    * [DCNN提取特征](#dcnn提取特征)
+      * [cascade of bottom-up image segmentation](#cascade-of-bottom-up-image-segmentation)
+      * [DCNN features + segmentations](#dcnn-features--segmentations)
+      * [directly provide dense category-level pixel label](#directly-provide-dense-category-level-pixel-label)
+  * [技巧](#技巧)
+    * [空洞卷积](#空洞卷积)
+    * [ASPP](#aspp)
+    * [全连接CRF](#全连接crf)
+  * [实验](#实验)
+    * [失败的模式](#失败的模式)
+  * [结论](#结论)
+  * [参考](#参考)
+
 ## 摘要
 
 在这项工作中, 我们用深度学习来解决语义图像分割的任务, 并做出三个主要贡献, 这些贡献在实验上显示具有实质性的实用价值.

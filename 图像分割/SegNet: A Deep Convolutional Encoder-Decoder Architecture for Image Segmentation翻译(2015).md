@@ -1,5 +1,16 @@
 # SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation(2015)
 
+* [SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation(2015)](#segnet-a-deep-convolutional-encoder-decoder-architecture-for-image-segmentation2015)
+  * [结构](#结构)
+  * [训练](#训练)
+    * [数据集](#数据集)
+    * [初始化](#初始化)
+    * [损失](#损失)
+    * [指标](#指标)
+  * [测试](#测试)
+  * [想法](#想法)
+  * [参考](#参考)
+
 ## 结构
 
 ![1545042513014](assets/1545042513014.png)

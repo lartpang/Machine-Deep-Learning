@@ -4,6 +4,34 @@
 > 论文: <http://xiaoyongshen.me/webpage_portrait/papers/portrait_eg16.pdf>
 > 翻译: <https://liqiang311.github.io/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/Automatic-Portrait-Segmentation-for-Image-Stylization-%E7%BF%BB%E8%AF%91%E5%AD%A6%E4%B9%A0/>
 
+* [Automatic Portrait Segmentation for Image Stylization](#automatic-portrait-segmentation-for-image-stylization)
+  * [Abstract](#abstract)
+  * [引言](#引言)
+  * [Related Work](#related-work)
+    * [Interactive Image Selection](#interactive-image-selection)
+    * [CNNs for Image segmentation](#cnns-for-image-segmentation)
+    * [Image Matting](#image-matting)
+    * [Semantic Stylization](#semantic-stylization)
+  * [Our Motivation and Approach](#our-motivation-and-approach)
+    * [Fully Convolutional Neutral Networks](#fully-convolutional-neutral-networks)
+    * [Understandings for Our Task](#understandings-for-our-task)
+    * [Our Approach](#our-approach)
+      * [Position Channels](#position-channels)
+      * [Shape Channel](#shape-channel)
+  * [Data and Model Training](#data-and-model-training)
+    * [Data Preparation](#data-preparation)
+    * [Model Training](#model-training)
+    * [Running Time for Training and Testing](#running-time-for-training-and-testing)
+  * [Results and Applications](#results-and-applications)
+    * [Quantitative and Visual Analysis](#quantitative-and-visual-analysis)
+    * [Post-processing](#post-processing)
+    * [User Study of Our Method](#user-study-of-our-method)
+    * [Automatic Segmentation for Image Stylization](#automatic-segmentation-for-image-stylization)
+    * [Other Applications](#other-applications)
+  * [Conclusions and Future Work](#conclusions-and-future-work)
+  * [补充资料](#补充资料)
+    * [homography](#homography)
+
 ## Abstract
 
 肖像是摄影和绘画的主要艺术形式。在大多数情况下，艺术家试图使主体从周围突出，例如，使其更亮或更锐利。在数字世界中，通过使用适合于图像语义的照相或绘画滤镜处理肖像图像，可以实现类似的效果。虽然存在用于描述主题的成功的用户引导方法，但缺乏全自动技术并且产生不令人满意的结果。我们的论文首先通过引入专用于肖像的新自动分割算法来解决这个问题。然后我们在此结果的基础上描述了几个利用我们的自动分割算法生成高质量肖像的肖像滤镜。

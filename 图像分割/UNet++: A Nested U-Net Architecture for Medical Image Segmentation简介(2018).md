@@ -4,6 +4,12 @@
 >
 > https://zhuanlan.zhihu.com/p/44958351
 
+* [UNet++: A Nested U-Net Architecture for Medical Image Segmentation(2018)](#unet-a-nested-u-net-architecture-for-medical-image-segmentation2018)
+  * [结构](#结构)
+  * [关于深度的思考](#关于深度的思考)
+  * [使用多尺度的特征](#使用多尺度的特征)
+  * [深监督与剪枝](#深监督与剪枝)
+
 ## 结构
 
 文章对U-Net改进的点主要是skip connection.

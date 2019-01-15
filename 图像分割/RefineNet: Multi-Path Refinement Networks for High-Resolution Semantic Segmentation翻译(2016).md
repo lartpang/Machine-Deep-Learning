@@ -1,5 +1,22 @@
 # RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation(2016)
 
+* [RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation(2016)](#refinenet-multi-path-refinement-networks-for-high-resolution-semantic-segmentation2016)
+  * [概要](#概要)
+  * [引言](#引言)
+  * [相关工作](#相关工作)
+  * [背景](#背景)
+  * [提出的方法](#提出的方法)
+    * [Multi-Path Refinement](#multi-path-refinement)
+    * [RefineNet](#refinenet)
+      * [Residual convolution unit(RCU)](#residual-convolution-unitrcu)
+      * [Multi-resolution fusion](#multi-resolution-fusion)
+      * [Chained residual pooling](#chained-residual-pooling)
+      * [Output convolutions](#output-convolutions)
+    * [Identity Mappings in RefineNet](#identity-mappings-in-refinenet)
+  * [实验](#实验)
+  * [改进版本](#改进版本)
+  * [结论](#结论)
+
 ## 概要
 
 最近, 很深的卷积神经网络(CNN)在目标识别中有着出色的表现, 也成为了密集分类问题的首选, 例如语义分割等问题. 然而, 在CNN中重复的下采样操作, 像池化或卷积, 导致显著降低了初始图像的分辨率. 这里, 论文提出的RefineNet, 一个通用的多路径优化网络, 明确地沿着下采样流程, 利用所有可用的信息, 使高分辨率预测使用远距离残余链接. 这样, 捕获高级语义特征的更深的层, 可以直接提炼使用来自早期卷积的细粒度特征. RefineNet的单个组件使用残余链接, 接在恒等映射之后, 它允许有效的端到端训练. 进一步, 论文引入了链式残差池化(chained residual pooling), 来以一种有效方式捕捉丰富背景内容.

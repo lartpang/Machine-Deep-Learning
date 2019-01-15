@@ -31,6 +31,25 @@
 
 这里的第6层是哪里来的?是前面的5C通道的特征输出汇总来的?
 
+* [Learning to Promote Saliency Detectors](#learning-to-promote-saliency-detectors)
+  * [Abstract](#abstract)
+  * [Introduction](#introduction)
+  * [Related works](#related-works)
+    * [BU](#bu)
+    * [TD](#td)
+    * [TD+BU](#tdbu)
+  * [The Proposed Method](#the-proposed-method)
+    * [The anchor network](#the-anchor-network)
+    * [Iterative testing scheme](#iterative-testing-scheme)
+    * [Pixel embedding](#pixel-embedding)
+    * [Region embedding](#region-embedding)
+  * [Experiments](#experiments)
+    * [评价标准](#评价标准)
+    * [Implementation details](#implementation-details)
+    * [Performance](#performance)
+  * [总结](#总结)
+  * [参考链接](#参考链接)
+
 ## Abstract
 
 The categories and appearance of salient objects varyfrom image to image, therefore, saliency detection is animage-specific task.  Due to lack of large-scale saliency training data, using deep neural networks (DNNs) with pre-training is difficult to precisely capture the image-specific saliency cues. To solve this issue, we formulate a **zero-shot learning** problem to promote existing saliency detectors.

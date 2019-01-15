@@ -2,6 +2,25 @@
 
 2012年, Alex Krizhevsky发表了[AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf), 相对比LeNet它的网络层次更加深, 从LeNet的5层到AlexNet的7层, 更重要的是AlexNet还赢得了2012年的ImageNet竞赛的第一. AlexNet不仅比LeNet的神经网络层数更多更深, 并且可以学习更复杂的图像高维特征.
 
+* [AlexNet(2012)](#alexnet2012)
+  * [小结](#小结)
+  * [论文概要](#论文概要)
+  * [预处理](#预处理)
+  * [新奇点](#新奇点)
+    * [激活函数ReLU](#激活函数relu)
+    * [多GPU处理](#多gpu处理)
+    * [局部响应归一化](#局部响应归一化)
+    * [重叠汇聚](#重叠汇聚)
+    * [分组卷积](#分组卷积)
+  * [整体架构](#整体架构)
+  * [防止过拟合的手段](#防止过拟合的手段)
+    * [Data Augmentation(数据扩充)](#data-augmentation数据扩充)
+    * [随机失活](#随机失活)
+  * [训练](#训练)
+    * [细节](#细节)
+    * [结果](#结果)
+  * [代码](#代码)
+
 ## 小结
 
 * 使用ReLU函数作为激活函数, 降低了Sigmoid类函数的计算量

@@ -2,6 +2,29 @@
 
 > 论文: <https://arxiv.org/abs/1503.02531v1>
 
+* [Distilling the Knowledge in a Neural Network](#distilling-the-knowledge-in-a-neural-network)
+  * [Abstract](#abstract)
+  * [Introduction](#introduction)
+  * [Distillation](#distillation)
+    * [Matching logits is a special case of distillation](#matching-logits-is-a-special-case-of-distillation)
+  * [Preliminary experiments on MNIST](#preliminary-experiments-on-mnist)
+  * [Experiments on speech recognition](#experiments-on-speech-recognition)
+    * [Results](#results)
+  * [Training ensembles of specialists on very big datasets](#training-ensembles-of-specialists-on-very-big-datasets)
+    * [The JFT dataset](#the-jft-dataset)
+    * [Specialist Models](#specialist-models)
+    * [Assigning classes to specialists](#assigning-classes-to-specialists)
+    * [Performing inference with ensembles of specialists](#performing-inference-with-ensembles-of-specialists)
+    * [Results](#results-1)
+  * [Soft Targets as Regularizers](#soft-targets-as-regularizers)
+    * [Using soft targets to prevent specialists from overfitting](#using-soft-targets-to-prevent-specialists-from-overfitting)
+  * [Relationship to Mixtures of Experts](#relationship-to-mixtures-of-experts)
+  * [Discussion](#discussion)
+  * [补充内容](#补充内容)
+    * [triphone](#triphone)
+    * [梅尔刻度(Mel-scale)](#梅尔刻度mel-scale)
+  * [参考链接](#参考链接)
+
 知识蒸馏（Knowledge Distilling）是模型压缩的一种方法，是指利用已经训练的一个较复杂的Teacher模型，指导一个较轻量的Student模型训练，从而在减小模型大小和计算资源的同时，尽量保持原Teacher模型的准确率的方法。这种方法受到大家的注意，主要是由于Hinton的论文Distilling the Knowledge in a Neural Network。
 
 @Naiyan Wang
@@ -505,7 +528,7 @@ We have not yet shown that we can distill the knowledge in the specialists back 
 
 在发音过程中，因为协同发音的影响，同一个音素在不同的位置，其发音变化很大. 同样的元音[eh]在不同的单词中的发音在频域上区分非常明显。因为单音素monophone 是上下文独立的（context-independent）. 为了能够表示这种区别，因此提出了triphone的概念，triphone是根据左右音素来确定的，因此是上下文相关的（context-dependent）.
 
-## 梅尔刻度(Mel-scale)
+### 梅尔刻度(Mel-scale)
 
 (又称Mel尺度，英语：Mel scale)，是一种基于人耳对等距的音高(pitch)变化的感官判断而定的非线性频率刻度。由Stanley Smith Stevens、John Volkman 和Newman于1937年命名。
 
