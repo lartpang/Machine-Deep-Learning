@@ -7,102 +7,6 @@
 
 在cs231n笔记的基础上**进一步扩展**, 是我ML&DL学习总结的记录.
 
-## changelog
-
-* 2018年11月15日:
-
-    最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习.
-
-    希望可以帮助自己更深入的理解.
-
-* 2018年11月19日:
-
-    准备开始看Yolo/SSD系列.
-
-    这几天看完了RCNN系列的文章, 略感心累.
-
-    准备过些日子重新在整理下文档结构吧.
-
-* 2018年11月30日:
-
-    看完了RCNN系列, 看完了SSD&Faster的实现, YOLO简单过了一下, 接下来准备看下其他的关于目标检测算法论文.
-
-* 2018年12月04日:
-
-    看完了RFCN, 可变形卷积, FPN, 再往后就是mask-rcnn等更为牛逼的网络了, 可是自我感觉, 到目前来说, 或许应该暂停下了, 准备开始复现代码了.
-
-    编程能力是基石, 不可缺少, 这个不稳, 一切都不靠谱, 需要上手练练了, 之前只是看了下Faster/SSD的代码, 其他就没有详细读过了, 感觉应该仔细学习下tensorflow, 先从Cifar10的分类网络练手吧!
-
-* 2019年01月06日
-
-    最近在做显著性检测相关的学习, 主要在看一些分割和显著性的论文.
-
-<details>
-<summary>已读论文</summary>
-
-1. 2012
-    1. AlexNet
-2. 2013
-    1. NiN
-3. 2014
-    1. OverFeat
-    2. GoogLeNet
-    3. VGG
-    4. R-CNN
-    5. SPP-Net
-4. 2015
-    1. 深度学习综述(三巨头, 简单看了下)
-    2. BN-GoogLeNet
-    3. InceptionV2/V3
-    4. ResNet
-    5. FCN
-    6. Deconvolution Network(Semantic Segmentation)
-    7. Fast R-CNN
-    8. YOLO-V1
-    9. SSD
-    10. HED(简单看了下)
-    11. STN(简单看了下, 为了进一步了解可变形卷积)
-    12. DAG-RNN
-    13. SegNet
-    14. U-Net
-5. 2016
-    1. Faster R-CNN
-    2. YOLO-V2(简单看了下改进)
-    3. FPN
-    4. R-FCN
-    5. Automatic Portrait Segmentation for Image Stylization
-    6. Deep Automatic Portrait Matting(0)
-    7. DeepLabv2
-    8. DHSNet
-    9. RFCN(Saliency)
-    10. PSPNet
-    11. RefineNet
-6. 2017
-    1. SeNet
-    2. DenseNet
-    3. SqueezeNet
-    4. Deformable ConvNet
-    5. Deep Image Matting
-7. 2018
-    1. YOLO-V3(简单看了下改进)
-    2. Deep Propagation Based Image Matting
-    3. Dense DAG-RNN
-    4. Semantic Human Matting
-    5. UNet++(简单看了下思路)
-
-</details>
-
-## 后期想法
-
-调整文件结构
-
-1. 基础文章收集到一起
-2. 论文部分进行一下分类归档
-3. 删除文章未使用的图片
-4. 复现分类网络
-
----
-
 <details>
 <summary> 关于CS231n笔记部分内容 </summary>
 
@@ -124,24 +28,31 @@ CS231n课程笔记的翻译, 始于@杜客在一次回答问题“应该选择Te
 
 > 感谢对于CS231n的笔记的翻译.
 
-~~## 关于Linux相关知识~~ 这部分内容已经转移到了另一个仓库 [LinuxNote](https://github.com/lartpang/LinuxNote)
+## changelog
 
-## 关于Python
+* 2018年11月15日: 最近在看目标检测部分内容, 主要会看RCNN->SPP-Net->Fast RCNN->Faster RCNN, 总结的书写方式要改变下, 为了节省时间, 提高效率, 更多增加自己的思考, 决定不再弄论文的翻译复制过来, 在上面的基础上做笔记这样的方式了, 准备按照架构的流程, 理清架构的思路, 以问题推动思考的方式来进行学习. 希望可以帮助自己更深入的理解.
+* 2018年11月19日: 准备开始看Yolo/SSD系列. 这几天看完了RCNN系列的文章, 略感心累. 准备过些日子重新在整理下文档结构吧.
+* 2018年11月30日: 看完了RCNN系列, 看完了SSD&Faster的实现, YOLO简单过了一下, 接下来准备看下其他的关于目标检测算法论文.
+* 2018年12月04日: 看完了RFCN, 可变形卷积, FPN, 再往后就是mask-rcnn等更为牛逼的网络了, 可是自我感觉, 到目前来说, 或许应该暂停下了, 准备开始复现代码了. 编程能力是基石, 不可缺少, 这个不稳, 一切都不靠谱, 需要上手练练了, 之前只是看了下Faster/SSD的代码, 其他就没有详细读过了, 感觉应该仔细学习下tensorflow, 先从Cifar10的分类网络练手吧!
+* 2019年01月06日: 最近在做显著性检测相关的学习, 主要在看一些分割和显著性的论文. 框架最终选择了pytorch.
+* 2019年04月17日: 好久没有更新了, 主要是当前更新文档主要存放在[语雀](https://www.yuque.com/lart/papers), 同样支持markdown, 图片公式什么的也还方便. 目前主要看的论文是显著性, 但是会关注下图神经网络和分割相关的论文.
 
-主要穿插在笔记代码中.
+## 后期想法
 
-## 关于`Net-Paper`中的paper
+1. 基础文章收集到一起
+2. 论文部分进行一下分类归档
+3. 删除文章未使用的图片
 
-大多数是直接参考slim的代码和http://noahsnail.com博客内容, 博客中没有的直接谷歌.
+## 其他
 
-> https://github.com/tensorflow/models/tree/master/research/slim
->
-> "通天塔(有很多论文翻译, 虽然翻译的一般, 但是可以看)": http://tongtianta.site/
->
-> https://arxiv.org/
+论文开始的时候多是直接找翻译, 现在大多数是直接看原文, 有时候原文的细节会丰富些.
 
----
+* https://github.com/tensorflow/models/tree/master/research/slim
+* "通天塔(有很多论文翻译, 虽然翻译的一般, 但是可以看)": http://tongtianta.site/
+* https://arxiv.org/
 
-感谢开源社区, 感谢网络世界, 感谢帮助到我的所有人.
+## 感谢
 
-笔记随时在补充, 更新.
+感谢开源社区.
+
+笔记随时在补充, 更新. 不过可能后期更新多在[语雀](https://www.yuque.com/lart/papers)上, 有时间会尽可能搬运一下.
