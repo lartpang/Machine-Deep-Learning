@@ -114,34 +114,36 @@ CNN中的特征映射和卷积是3D的. 可变形卷积和RoI池化模块都在2
 
 对于输出特征映射$\mathbf{y}$上的每个位置$\mathbf{p}_0$, 我们有
 
-$\mathbf{y}(\mathbf{p}_0)=\sum_{\mathbf{p}_n\in\mathcal{R}}\mathbf{w}(\mathbf{p}_n)\cdot \mathbf{x}(\mathbf{p}_0+\mathbf{p}_n) \tag{1}$
+$\mathbf{y}(\mathbf{p}_0)=\sum_{\mathbf{p}_n\in\mathcal{R}}\mathbf{w}(\mathbf{p}_n)\cdot \mathbf{x}(\mathbf{p}_0+\mathbf{p}_n) (1)$
 
  其中$\mathbf{p}_n$枚举了$\mathcal{R}$中的位置.
 
 在可变形卷积中, 规则的网格$\mathcal{R}$通过偏移$\lbrace \Delta \mathbf{p}_n|n=1,…,N\rbrace$增大, 其中$N=|\mathcal{R}|$. 方程变为
 
-$\mathbf{y}(\mathbf{p}_0)=\sum_{\mathbf{p}_n\in\mathcal{R}}\mathbf{w}(\mathbf{p}_n)\cdot \mathbf{x}(\mathbf{p}_0+\mathbf{p}_n+\Delta \mathbf{p}_n).\tag{2}$
+$\mathbf{y}(\mathbf{p}_0)=\sum_{\mathbf{p}_n\in\mathcal{R}}\mathbf{w}(\mathbf{p}_n)\cdot \mathbf{x}(\mathbf{p}_0+\mathbf{p}_n+\Delta \mathbf{p}_n)(2)$
 
 在原本卷积的基础上进行了一个额外的偏移.
 
 现在, 采样是在不规则且有偏移的位置$\mathbf{p}_n + \Delta \mathbf{p}_n$上. 由于偏移$\Delta \mathbf{p}_n$通常是小数, 方程(2)可以通过双线性插值实现
 
-$\mathbf{x}(\mathbf{p})=\sum_\mathbf{q} G(\mathbf{q},\mathbf{p})\cdot \mathbf{x}(\mathbf{q}), \tag{3}$
+$\mathbf{x}(\mathbf{p})=\sum_\mathbf{q} G(\mathbf{q},\mathbf{p})\cdot \mathbf{x}(\mathbf{q})(3)$
 
 其中$\mathbf{p}$表示任意(小数)位置(公式(2)中$\mathbf{p}=\mathbf{p}_0+\mathbf{p}_n+\Delta \mathbf{p}_n$, 也就是输入特征图上, 在进行变形卷积计算的时候感受野上所对应的坐标), $\mathbf{q}$枚举了特征映射$\mathbf{x}$中所有整体空间位置(也就是输入特征图的所有的坐标), $G(\cdot,\cdot)$是双线性插值的核. 注意$G$是二维的. 它被分为两个一维核
 
-$G(\mathbf{q},\mathbf{p})=g(q_x,p_x)\cdot g(q_y,p_y), \tag{4}$
+$G(\mathbf{q},\mathbf{p})=g(q_x,p_x)\cdot g(q_y,p_y)(4)$
 
 其中$g(a,b)=max(0,1-|a-b|)$. 方程(3)可以快速计算因为$G(\mathbf{q},\mathbf{p})$仅对于一些$\mathbf{q}$是非零的.
 
-> 上面公式可能理解起来有些不够直观, 但是可以按照如下的流程理解. 公式(3)中的双线性插值, 指的是由于预测后的结果对应的索引是小数, 也就是说对应的坐标位置是一个小数位置, 这在实际图片中是不存在的, 但是我们又需要使用这个值, 那我们该怎么办? 这里就是利用这个坐标对应点的所在的(由真实像素构成的)网格的四个坐标点像素值双线性插值而来. 得到这个值后, 对原始输入没有影响, 只是用来作为输入作用在卷积核上的.
+> 上面公式可能理解起来有些不够直观, 但是可以按照如下的流程理解. 公式(3)中的双线性插值, 指的是由于预测后的结果对应的索引是小数, 也就是说对应的坐标位置是一个小数位置, 这在实际图片中是不存在的, 但是我们又需要使用这个值, 那我们该怎么办? 这里就是利用这个坐标对应点的所在的(由真实像素构成的)网格的四个坐标点像素值双线性插值而来. 得到这个值后, 对原始输入没有影响。这将作为调整后的输入，送入后续的卷积.
 >
 > 注意: 这里使用过普通卷积获得的偏移量, 与后面的可变形池化不同, 使用的是全连接层.
 >
-> 1. 原始图片batch(大小为b\*h\*w\*c), 记为U(图中的最左边的输入特征图), **经过一个普通卷积**(下图中的conv), 卷积填充为same, 即输出输入大小不变, 对应的输出结果为(b\*h\*w\*2c), 记为V(吉图中的offset filed), **输出的结果是指原图片batch中每个像素(图中的offsets)的偏移量**(x偏移与y偏移, 因此为2c)
+> **补充：（2019年05月19日20:23:21）公式理解可以看STN的补充材料中的介绍。**
+>
+> 1. 原始图片batch(大小为b\*h\*w\*c), 记为U(图中的最左边的输入特征图), **经过一个普通卷积**(下图中的conv), 输出输入大小保持不变, 对应的输出结果为(b\*h\*w\*2c), 记为V(即图中的offset filed), **输出的结果是指原图片batch中每个像素(图中的offsets)的偏移量**(x偏移与y偏移, 因此为2c)
 > 2. 将**U中图片的像素索引值(即坐标)与V(坐标偏移量)相加**, 得到偏移后的position(即在原始图片U中的坐标值), 需要将position值限定为图片大小以内, position的大小为(b\*h\*w\*2c), 但position只是一个坐标值, 而且还是float类型的, 我们需要这些float类型的坐标值获取像素.
-> 3. 例, 取一个坐标值(a,b), 将其转换为四个整数, floor(a), ceil(a), floor(b), ceil(b), 将这四个整数进行整合, 得到四对坐标(floor(a),floor(b)),  ((floor(a),ceil(b)),  ((ceil(a),floor(b)),  ((ceil(a),ceil(b)). 这四对坐标每个坐标都对应U中的一个像素值, 而**我们需要得到(a,b)的像素值, 这里采用双线性差值的方式计算**(一方面得到的像素准确, 另一方面可以进行反向传播)
-> 4. 在**得到position的所有像素后, 即得到了一个新图片M, 将这个新图片M作为输入数据输入到别的层中**, 如普通卷积.
+> 3. 例, 取一个坐标值(a,b), 将其转换为四个整数, floor(a), ceil(a), floor(b), ceil(b)（实际上就是这个点所在像素格子中的四个顶点）, 将这四个整数进行整合, 得到四对坐标(floor(a),floor(b)),  ((floor(a),ceil(b)),  ((ceil(a),floor(b)),  ((ceil(a),ceil(b)). 这四对坐标每个坐标都对应U中的一个像素值, 而**我们需要得到(a,b)的像素值, 这里采用双线性插值的方式计算**(一方面得到的像素准确, 另一方面可以进行反向传播)
+> 4. 在**得到position的所有像素后, 即得到了一个新特征图M（实际并不存在）, 将这个新图片M作为输入数据输入到别的层中**, 如普通卷积. 也就是之前的操作调整了这个后续操作的输入。
 >
 > 原文: https://blog.csdn.net/mykeylock/article/details/77746499
 
@@ -229,11 +231,11 @@ $\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}(\mathbf{p}_0+\mathbf{p
 
 简而言之, 与方程(5)中RoI池化的区别在于, 通用特征映射$\mathbf{x}$被特定的位置敏感的分数映射$\mathbf{x}_{i,j}$所取代.
 
-$\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\mathbf{p})/n_{ij}. \tag{7}$
+$\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\mathbf{p})/n_{ij}. (7)$
 
 在可变形PS RoI池化中, 方程(6)中唯一的变化是$\mathbf{x}$也被修改为$\mathbf{x}_{i,j}$.
 
-$\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\mathbf{p}+\Delta \mathbf{p}_{ij})/n_{ij}. \tag{8}$
+$\mathbf{y}(i,j)=\sum_{\mathbf{p}\in bin(i,j)} \mathbf{x}_{i,j}(\mathbf{p}_0+\mathbf{p}+\Delta \mathbf{p}_{ij})/n_{ij}. (8)$
 
 但是, 偏移学习是不同的. 它遵循[7]中的“全卷积”精神, 如下图所示. 在顶部分支中, 一个卷积层生成完整空间分辨率的偏移量字段. 对于每个RoI(也对于每个类), 在这些字段上应用PS RoI池化以获得*归一化*偏移量$\Delta \widehat{\mathbf{p}}_{ij}$, 然后以上面可变形RoI池化中描述的相同方式将其转换为实数偏移量$\Delta \mathbf{p}_{ij}$.
 
@@ -478,7 +480,7 @@ DPM是一个浅层模型, 其**建模变形能力有限**. 虽然其推理算法
 ## 阅读中的疑惑
 
 1. 在深度CNN中学习**密集空间变换**对于复杂的视觉任务(如目标检测和语义分割)是有效的?
-2. 关于公式3, 4这里怎么理解, 或者说怎么推导呢?
+~~2. 关于公式3, 4这里怎么理解, 或者说怎么推导呢?~~ 可见同仓库中STN文档的介绍。
 3. RoI可变性池化中的第一步是怎样的?(见前面的标注)
 
 ## 参考链接
