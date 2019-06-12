@@ -1,5 +1,16 @@
 # Salient Object Detection with Pyramid Attention and Salient Edges
 
+- [Salient Object Detection with Pyramid Attention and Salient Edges](#salient-object-detection-with-pyramid-attention-and-salient-edges)
+  - [主要亮点](#%E4%B8%BB%E8%A6%81%E4%BA%AE%E7%82%B9)
+  - [网络结构](#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84)
+    - [Pyramid Attention Module（2c）](#pyramid-attention-module2c)
+    - [Salient Edge Detector（2e）](#salient-edge-detector2e)
+      - [Dense connection](#dense-connection)
+      - [Discussion](#discussion)
+    - [Detailed Network Architecture](#detailed-network-architecture)
+  - [实验细节](#%E5%AE%9E%E9%AA%8C%E7%BB%86%E8%8A%82)
+  - [相关链接](#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5)
+
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560307460399-787e164c-e13b-42a7-b87d-11f11b8529d3.png#align=left&display=inline&height=291&name=image.png&originHeight=291&originWidth=1103&size=57369&status=done&width=1103)
 
 ## 主要亮点
@@ -26,16 +37,17 @@
 - 最终将所有的注意力图进行放缩，调整到原始的该层分辨率的大小(MxM)，得到一个新的注意力图集合：![](https://cdn.nlark.com/yuque/__latex/cb33bd263b55805ceaba2a63db1d7685.svg#card=math&code=%5Cleft%5C%7B%5Cmathbf%7Bl%7D%27%5E%7Bn%7D%20%5Cin%20%5B0%2C1%5D%5E%7BM%20%5Ctimes%20M%7D%20%5Cright%5C%7D_%7Bn%3D1%7D%5E%7BN%7D&height=30&width=155)。
 - 最终所有的注意力图会相加后与原特征进行哈达马乘积计算，初步的加权后的特征图。
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560309925235-7401fbe4-c701-4cf7-8185-d630d08891a7.png#align=left&display=inline&height=55&name=image.png&originHeight=55&originWidth=614&size=7381&status=done&width=614)
+    ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560309925235-7401fbe4-c701-4cf7-8185-d630d08891a7.png#align=left&display=inline&height=55&name=image.png&originHeight=55&originWidth=614&size=7381&status=done&width=614)
 
     - 但由于被注意力图细化后的特征有大量的值趋于0，不利于梯度的传播，这里使用了一个额外的短连接作为改进，这使得，尽管较小的注意力值的情况下，也就是l‘近似于0，来自原始特征X的信息仍然可以保留下来。
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560309932757-1b00a164-1e51-4f4c-bf23-62bbc60eb9c6.png#align=left&display=inline&height=58&name=image.png&originHeight=58&originWidth=608&size=8135&status=done&width=608)
+    ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560309932757-1b00a164-1e51-4f4c-bf23-62bbc60eb9c6.png#align=left&display=inline&height=58&name=image.png&originHeight=58&originWidth=608&size=8135&status=done&width=608)
+
 这样的金字塔注意力结构提供了一个赋予每个对应的卷积层（会拥有一个增大了的感受野，图2d）一个全局视角。
 
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560310181235-cd7060c2-ef36-48c7-bc04-f8884fa49022.png#align=left&display=inline&height=580&name=image.png&originHeight=580&originWidth=1282&size=568994&status=done&width=1282)
 
-来自不同位置的特征对于显着性计算的贡献并不相同。 因此，**引入注意机制来关注那些对显着对象的本质最重要的位置。**通过设计，注意力模块可以通过迭代地对特征图进行下采样，来快速收集多尺度信息。**这种金字塔结构使得特征层的感受区域能够容易且迅速地扩大**。与之前的注意力模型相比，这里的金字塔注意力更加有利，因为它有效地通过扩大的感受野，利用了多尺度特征和强大的表示。所有这些都是像素显着性估计所必需的。
+来自不同位置的特征对于显着性计算的贡献并不相同。 因此，**引入注意机制来关注那些对显着对象的本质最重要的位置。** 通过设计，注意力模块可以通过迭代地对特征图进行下采样，来快速收集多尺度信息。**这种金字塔结构使得特征层的感受区域能够容易且迅速地扩大。** 与之前的注意力模型相比，这里的金字塔注意力更加有利，因为它有效地通过扩大的感受野，利用了多尺度特征和强大的表示。所有这些都是像素显着性估计所必需的。
 
 ### Salient Edge Detector（2e）
 
@@ -78,7 +90,7 @@
 
 #### Discussion
 
-- 为了保留更多的边界信息，添加了一个显着的边缘检测模块F，专门关注在真值边缘图P的监督下的对分割显着对象边界的优化。请注意，**F可以包含其他边缘感知滤波器**，例如_Semantic image segmentation with task-specific edge detection using cnns and a discriminatively trained domain transform_。
+- 为了保留更多的边界信息，添加了一个显着的边缘检测模块F，专门关注在真值边缘图P的监督下的对分割显着对象边界的优化。请注意，**F可以包含其他边缘感知滤波器**，例如 *Semantic image segmentation with task-specific edge detection using cnns and a discriminatively trained domain transform*。
 - 然后使用显着性特征Y和来自F的显式显着边缘信息来学习用于检测显着目标的读出网络R。
 - 通过重新使用来自其他层的信息来进一步引入密集连接以绘制代表性功率。
 
@@ -98,14 +110,14 @@
     - For ℓ-th layer,
         - a set of upsampling operations (H) is adopted in order to **enlarge all salient object estimations and salient edge information** from all preceding layers with current feature resolutions（密集连接前调整分辨率）.
         - We then update the saliency representation Y through Eq.7.
-        - Next, **the edge detection module F and saliency readout function R are adopted to generate the corresponding saliency map S. **
+        - Next, **the edge detection module F and saliency readout function R are adopted to generate the corresponding saliency map S.**
     - 最终的S就是最终输出。
 - Overall Loss.
     - All the training images {I} are resized to fixed dimensions of 224×224×3.
     - The salient boundary maps Pk∈{0,1} are generated from the corresponding ground truth salient object map Gk∈{0,1} and **dilated to a three-pixel radius**.
     - Considering all five-side outputs, the overall training loss for a train-ing image I is:
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560329508856-5b98da33-fa22-4c20-a101-d23fc50616b1.png#align=left&display=inline&height=101&name=image.png&originHeight=101&originWidth=598&size=14382&status=done&width=598)
+    ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560329508856-5b98da33-fa22-4c20-a101-d23fc50616b1.png#align=left&display=inline&height=101&name=image.png&originHeight=101&originWidth=598&size=14382&status=done&width=598)
 
 - Implementation Details
     - PAGE-Net is implemented in Keras.
@@ -140,7 +152,7 @@ We find that PAGE-Net performs well in a variety of challenging scenarios, e.g.,
 
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560330267208-b1205abc-7c35-42c0-a925-55d43461c467.png#align=left&display=inline&height=551&name=image.png&originHeight=551&originWidth=611&size=108229&status=done&width=611)
 
-> The baseline _w/ single scale _corresponds to the results obtained with a single-scale attention module (N=1 in Eq. 3).
+> The baseline *w/ single scale* corresponds to the results obtained with a single-scale attention module (N=1 in Eq. 3).
 
 **Salient Edge Information的影响**
 
