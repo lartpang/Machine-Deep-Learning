@@ -1,5 +1,20 @@
 # An Iterative and Cooperative Top-down and Bottom-up Inference Network for Salient Object Detection
 
+- [An Iterative and Cooperative Top-down and Bottom-up Inference Network for Salient Object Detection](#an-iterative-and-cooperative-top-down-and-bottom-up-inference-network-for-salient-object-detection)
+  - [主要贡献](#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE)
+  - [网络结构](#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84)
+  - [主要动机](#%E4%B8%BB%E8%A6%81%E5%8A%A8%E6%9C%BA)
+    - [之前工作的不足](#%E4%B9%8B%E5%89%8D%E5%B7%A5%E4%BD%9C%E7%9A%84%E4%B8%8D%E8%B6%B3)
+    - [与现有的基于FCN的模型的关联](#%E4%B8%8E%E7%8E%B0%E6%9C%89%E7%9A%84%E5%9F%BA%E4%BA%8Efcn%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%B3%E8%81%94)
+  - [网络细节](#%E7%BD%91%E7%BB%9C%E7%BB%86%E8%8A%82)
+    - [top-down saliency inference](#top-down-saliency-inference)
+    - [bottom-up saliency inference](#bottom-up-saliency-inference)
+    - [Iterative top-down and bottom-up inference](#iterative-top-down-and-bottom-up-inference)
+    - [Feature-sharing and weight-sharing](#feature-sharing-and-weight-sharing)
+    - [Possible Variants and Other Detail](#possible-variants-and-other-detail)
+  - [实验细节](#%E5%AE%9E%E9%AA%8C%E7%BB%86%E8%8A%82)
+  - [相关链接](#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5)
+
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560152850369-74ed5505-ceb3-43e2-9945-b63e33526473.png#align=left&display=inline&height=291&name=image.png&originHeight=291&originWidth=1342&size=53121&status=done&width=1342)
 
 ## 主要贡献
@@ -31,7 +46,7 @@
     1. 相反，自下而上的过程以相反的方向进行，从刺激到高级视觉理解，每个连续阶段对输入进行更复杂的分析。
     1. 大多数心理学家现在都认为，自上而下和自下而上的过程都与感知有关。这促使我们以联合和迭代的方式探索两个系统的显着性推断。众所周知，**顶层网络层承载语义丰富的信息，而底层涉及低级细节**，我们认为**顶层显着性是视觉场景的全局和谐解释，用于在自上而下的方式中指导细粒度显着性估计。相反，如果从最好的显着性开始，可以利用它以自下而上的方式改进上层显着性**。
 2. 基于FCN的SOD模型的最新进展是网络设计的第二个灵感。**他们的成功归功于他们将粗糙的上层显着性与低级但空间定义的特征逐步整合**。因此，最终估计是最精确和最准确的。
-    1. **这促使我们考虑为什么不利用最终的、最好的显着性来通过自下而上的过程反向改进先前的上层估计，然后重复从粗到细、自上而下的过程以获得更准确、最好的估计？**通过这种直观而重要的洞察力，我们开发了一个功能强大的通用的显着性推理网络，以协作的方式部署这两个流程。
+    1. **这促使我们考虑为什么不利用最终的、最好的显着性来通过自下而上的过程反向改进先前的上层估计，然后重复从粗到细、自上而下的过程以获得更准确、最好的估计？** 通过这种直观而重要的洞察力，我们开发了一个功能强大的通用的显着性推理网络，以协作的方式部署这两个流程。
     1. 该网络使用自上而下过程中的细粒度显着性来自下而上地改进高层估计。然后使用精确的高层显着性来进一步鼓励更有效的自上而下推断。这种设计有效地促进了不同层之间的显着性信息的交换，从而产生了更好的学习和推理能力。更重要的是，模型配备了完整的、迭代的前馈/反馈推理策略，而不是常用的前馈网络或类UNet模型，它们只提供简单的粗到细推理。**由于缺乏反馈策略，前馈显着性模型受到限制**。尽管类似UNet的SOD模型部分地解决了这个问题，但它们并未考虑自上而下和自下而上的流程交互和集成。
     1. 从网络设计的角度来看，**大多数以前的基于FCN的显着性模型可以被认为是我们提出的显着性推理网络的特定形式**。虽然以前的一些作品采用了自上而下和自下而上的策略，但**它们要么不是以端到端的可训练方式学习，要么不让这两个过程相互迭代地协作**。
 
@@ -58,7 +73,7 @@
 这里将现有的基于FCN的模型划分为两类：feed-forward network和top-down inference based 两种模型
 
 - feed-forward network：如图a，这种网络设计是直截了当的并且被广泛使用，但由于编码器内的池化操作而具有丢失很多空间细节的缺点。
-- top-down inference based：如图b，这类方法一般启发于UNet和top-down分割模型。这些方法可以被进一步分成两类：第一类如图2b左侧的模型，这里的top-down推理过程通过卷积层来实现；第二类如图2b右侧的模型，它引入一个循环机制来迭代优化每个侧输出，通过RNN的隐藏状态的更新。**然而这些方法都是从top-down推理过程中收益，很少考虑联合它和一个由下而上的过程。**PiCANet探索过这个，然而只考虑了bottum-top的显著性传播，但这两个过程并不是以迭代和合作的方式进行的。
+- top-down inference based：如图b，这类方法一般启发于UNet和top-down分割模型。这些方法可以被进一步分成两类：第一类如图2b左侧的模型，这里的top-down推理过程通过卷积层来实现；第二类如图2b右侧的模型，它引入一个循环机制来迭代优化每个侧输出，通过RNN的隐藏状态的更新。**然而这些方法都是从top-down推理过程中收益，很少考虑联合它和一个由下而上的过程。** PiCANet探索过这个，然而只考虑了bottum-top的显著性传播，但这两个过程并不是以迭代和合作的方式进行的。
 
 图2c给出了自上而下和自下而上显着性推理网络的核心方案。如图所示：
 
@@ -73,7 +88,7 @@
 
 这里使用的骨干网路是VGGNet和ResNet结构。
 
-迭代式增强结构中心假设是，**自上而下推断得到的高度准确、最精细的显着性可通过自下而上的过程提供更准确的高层显着性估计。更准确的高层显着性进一步实现了更有效的自下而上推理。**以这种方式，这两个过程以联合和迭代的方式执行以相互促进。
+迭代式增强结构中心假设是，**自上而下推断得到的高度准确、最精细的显着性可通过自下而上的过程提供更准确的高层显着性估计。更准确的高层显着性进一步实现了更有效的自下而上推理。** 以这种方式，这两个过程以联合和迭代的方式执行以相互促进。
 
 ### top-down saliency inference
 
@@ -122,7 +137,7 @@
     - 另外，通过稍微改变网络设计（图3f），可以在所有迭代和层之间的不同自下而上（或自上而下）推理层之间强制执行参数共享。
     - 具体来说，由于自下而上（和自上而下）推理层是由一组卷积核进行参数化的，可以添加维度统一层R（可以使用1x1卷积实现，来调整维度），它们**统一所有自下而上（和自上而下）的推理层的输入特征通道尺寸使它们相同**。于是等式1-2可以转换为下面的式子：
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560226064824-5a6a523a-6384-4c35-9ff4-ae6656147d59.png#align=left&display=inline&height=69&name=image.png&originHeight=69&originWidth=536&size=9232&status=done&width=536)
+    ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1560226064824-5a6a523a-6384-4c35-9ff4-ae6656147d59.png#align=left&display=inline&height=69&name=image.png&originHeight=69&originWidth=536&size=9232&status=done&width=536)
 
     - 此外，如果追求极轻量级的形式，甚至可以在所有迭代步骤中，**所有自下而上和自上而下的推理层中使用参数共享（图3g）**。这可以通过使唯独统一层压缩自下而上/自上而下推断层的每个输入以具有相同的通道尺寸来实现。在这种情况下，迭代的上下传播过程可以通过一个参数量很少的轻量级网络来实现。
 - 总之，通过权重共享，提出的迭代式自上而下和自下而上推理层可以用作现代网络架构的附加组件。 这证明了提出的模型的一般性和灵活性。
@@ -208,6 +223,3 @@ This is **because the errors in the loss can be directly back-propagated into ea
 ## 相关链接
 
 - 论文：[http://openaccess.thecvf.com/content_CVPR_2019/papers/Wang_An_Iterative_and_Cooperative_Top-Down_and_Bottom-Up_Inference_Network_for_CVPR_2019_paper.pdf](http://openaccess.thecvf.com/content_CVPR_2019/papers/Wang_An_Iterative_and_Cooperative_Top-Down_and_Bottom-Up_Inference_Network_for_CVPR_2019_paper.pdf)
-
-
-

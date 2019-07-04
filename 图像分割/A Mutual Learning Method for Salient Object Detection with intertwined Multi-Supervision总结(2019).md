@@ -1,5 +1,25 @@
 # A Mutual Learning Method for Salient Object Detection with intertwined Multi-Supervision
 
+- [A Mutual Learning Method for Salient Object Detection with intertwined Multi-Supervision](#a-mutual-learning-method-for-salient-object-detection-with-intertwined-multi-supervision)
+  - [主要亮点](#%E4%B8%BB%E8%A6%81%E4%BA%AE%E7%82%B9)
+  - [网络结构](#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84)
+  - [主要工作](#%E4%B8%BB%E8%A6%81%E5%B7%A5%E4%BD%9C)
+    - [Mutual Learning Module（提升显著性检测和前景轮廓检测的性能）](#mutual-learning-module%E6%8F%90%E5%8D%87%E6%98%BE%E8%91%97%E6%80%A7%E6%A3%80%E6%B5%8B%E5%92%8C%E5%89%8D%E6%99%AF%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B%E7%9A%84%E6%80%A7%E8%83%BD)
+    - [Edge Module（处理边缘检测任务，帮助MLM进行前景轮廓检测）](#edge-module%E5%A4%84%E7%90%86%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E4%BB%BB%E5%8A%A1%E5%B8%AE%E5%8A%A9mlm%E8%BF%9B%E8%A1%8C%E5%89%8D%E6%99%AF%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B)
+    - [Intertwined Supervision Method（显著性检测真值和其轮廓的交替监督）](#intertwined-supervision-method%E6%98%BE%E8%91%97%E6%80%A7%E6%A3%80%E6%B5%8B%E7%9C%9F%E5%80%BC%E5%92%8C%E5%85%B6%E8%BD%AE%E5%BB%93%E7%9A%84%E4%BA%A4%E6%9B%BF%E7%9B%91%E7%9D%A3)
+    - [损失函数](#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0)
+      - [编码器损失](#%E7%BC%96%E7%A0%81%E5%99%A8%E6%8D%9F%E5%A4%B1)
+      - [解码器损失](#%E8%A7%A3%E7%A0%81%E5%99%A8%E6%8D%9F%E5%A4%B1)
+    - [训练步骤](#%E8%AE%AD%E7%BB%83%E6%AD%A5%E9%AA%A4)
+  - [实验细节](#%E5%AE%9E%E9%AA%8C%E7%BB%86%E8%8A%82)
+    - [实验结果](#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C)
+    - [消融实验](#%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C)
+    - [均匀高亮与轮廓效果](#%E5%9D%87%E5%8C%80%E9%AB%98%E4%BA%AE%E4%B8%8E%E8%BD%AE%E5%BB%93%E6%95%88%E6%9E%9C)
+    - [MLM的计算损耗](#mlm%E7%9A%84%E8%AE%A1%E7%AE%97%E6%8D%9F%E8%80%97)
+    - [边缘检测](#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B)
+  - [总结](#%E6%80%BB%E7%BB%93)
+  - [相关链接](#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5)
+
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1559132401566-5366324b-88f8-4621-bdc2-27807e93c97f.png#align=left&display=inline&height=292&name=image.png&originHeight=292&originWidth=1120&size=92113&status=done&width=1120)
 
 ## 主要亮点
