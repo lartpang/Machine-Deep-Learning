@@ -1,6 +1,6 @@
 # SE2Net: Siamese Edge-Enhancement Network for Salient Object Detection
 
-- [SE2Net: Siamese Edge-Enhancement Network for Salient Object Detection](#se2net-siamese-edge-enhancement-network-for-salient-object-detection)
+- [SE2Net: Siamese Edge-Enhancement Network for Salient Object Detection](#SE2Net-Siamese-Edge-Enhancement-Network-for-Salient-Object-Detection)
   - [网络结构](#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84)
   - [主要贡献](#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE)
   - [迭代过程](#%E8%BF%AD%E4%BB%A3%E8%BF%87%E7%A8%8B)
@@ -77,7 +77,9 @@ Novel to most of the salient object detection methods, since our network can joi
 - 首先生成一系列5×5大小的矩形框B，其中各个框的中心都位于边预测图上的边上，而且所有的K个框，除了第一个和第K个有重叠外，其余框之间相接但是不相交。
 - 各个框根据边预测图，被内部的边分成了两部分，如第k个框划分结果为：B={B，B}。在分出来的两个区域中，根据区域预测图中，对应的显著性区域和非显著性区域的占比对该划分区域的预测结果进行重新赋值。主要基于观察：对于一块区域而言，内部的显著性区域大于非显著性区域的话，该区域就很有可能为显著性区域，反之亦然。主要的处理思路如式子10，这里![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1562159493934-d20e5744-acf6-4a5c-9ed2-117e3e72262f.png#align=left&display=inline&height=42&name=image.png&originHeight=42&originWidth=118&size=3680&status=done&width=118)，计算了该划分区域B中的显著性成分与非显著性成分之间的比值。从而依据此来对该区域进行判定。
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1562159366411-31b4d08b-5fab-4b9c-99d7-c12585d0baff.png#align=left&display=inline&height=97&name=image.png&originHeight=97&originWidth=521&size=8018&status=done&width=521)Because we further use the edge information to help refine the region masks, we **name it as the edge-guided inference algorithm.**
+![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1562159366411-31b4d08b-5fab-4b9c-99d7-c12585d0baff.png#align=left&display=inline&height=97&name=image.png&originHeight=97&originWidth=521&size=8018&status=done&width=521)
+
+Because we further use the edge information to help refine the region masks, we **name it as the edge-guided inference algorithm.**
 
 ![image.png](https://cdn.nlark.com/yuque/0/2019/png/192314/1562159641365-36f24089-89d2-4e2a-9612-387a218a4e5f.png#align=left&display=inline&height=498&name=image.png&originHeight=498&originWidth=531&size=67758&status=done&width=531)
 
