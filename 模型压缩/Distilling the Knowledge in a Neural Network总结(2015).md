@@ -2,33 +2,33 @@
 
 > 论文: <https://arxiv.org/abs/1503.02531v1>
 
-* [Distilling the Knowledge in a Neural Network](#distilling-the-knowledge-in-a-neural-network)
-  * [Abstract](#abstract)
-  * [Introduction](#introduction)
-  * [Distillation](#distillation)
-    * [Matching logits is a special case of distillation](#matching-logits-is-a-special-case-of-distillation)
-  * [Preliminary experiments on MNIST](#preliminary-experiments-on-mnist)
-  * [Experiments on speech recognition](#experiments-on-speech-recognition)
-    * [Results](#results)
-  * [Training ensembles of specialists on very big datasets](#training-ensembles-of-specialists-on-very-big-datasets)
-    * [The JFT dataset](#the-jft-dataset)
-    * [Specialist Models](#specialist-models)
-    * [Assigning classes to specialists](#assigning-classes-to-specialists)
-    * [Performing inference with ensembles of specialists](#performing-inference-with-ensembles-of-specialists)
-    * [Results](#results-1)
-  * [Soft Targets as Regularizers](#soft-targets-as-regularizers)
-    * [Using soft targets to prevent specialists from overfitting](#using-soft-targets-to-prevent-specialists-from-overfitting)
-  * [Relationship to Mixtures of Experts](#relationship-to-mixtures-of-experts)
-  * [Discussion](#discussion)
-  * [补充内容](#补充内容)
-    * [triphone](#triphone)
-    * [梅尔刻度(Mel-scale)](#梅尔刻度mel-scale)
-  * [参考链接](#参考链接)
+- [Distilling the Knowledge in a Neural Network](#Distilling-the-Knowledge-in-a-Neural-Network)
+  - [Abstract](#Abstract)
+  - [Introduction](#Introduction)
+  - [Distillation](#Distillation)
+    - [Matching logits is a special case of distillation](#Matching-logits-is-a-special-case-of-distillation)
+  - [Preliminary experiments on MNIST](#Preliminary-experiments-on-MNIST)
+  - [Experiments on speech recognition](#Experiments-on-speech-recognition)
+    - [Results](#Results)
+  - [Training ensembles of specialists on very big datasets](#Training-ensembles-of-specialists-on-very-big-datasets)
+    - [The JFT dataset](#The-JFT-dataset)
+    - [Specialist Models](#Specialist-Models)
+    - [Assigning classes to specialists](#Assigning-classes-to-specialists)
+    - [Performing inference with ensembles of specialists](#Performing-inference-with-ensembles-of-specialists)
+    - [Results](#Results-1)
+  - [Soft Targets as Regularizers](#Soft-Targets-as-Regularizers)
+    - [Using soft targets to prevent specialists from overfitting](#Using-soft-targets-to-prevent-specialists-from-overfitting)
+  - [Relationship to Mixtures of Experts](#Relationship-to-Mixtures-of-Experts)
+  - [Discussion](#Discussion)
+  - [补充内容](#补充内容)
+    - [triphone](#triphone)
+    - [梅尔刻度(Mel-scale)](#梅尔刻度Mel-scale)
+  - [参考链接](#参考链接)
 
 知识蒸馏（Knowledge Distilling）是模型压缩的一种方法，是指利用已经训练的一个较复杂的Teacher模型，指导一个较轻量的Student模型训练，从而在减小模型大小和计算资源的同时，尽量保持原Teacher模型的准确率的方法。这种方法受到大家的注意，主要是由于Hinton的论文Distilling the Knowledge in a Neural Network。
 
-@Naiyan Wang
-
+>@Naiyan Wang
+>
 > Knowledge Distill是一种简单弥补分类问题监督信号不足的办法。
 >
 > 传统的分类问题，模型的目标是将输入的特征映射到输出空间的一个点上，例如在著名的Imagenet比赛中，就是要将所有可能的输入图片映射到输出空间的1000个点上。这么做的话*这1000个点中的每一个点是一个one hot编码的类别信息*。这样**一个label能提供的监督信息只有log(class)这么多bit**。
@@ -41,8 +41,8 @@
 >
 > 综上所述，KD的核心思想在于"打散"原来压缩到了一个点的监督信息，让student模型的输出尽量match teacher模型的输出分布。其实要达到这个目标其实不一定使用teacher model，在数据标注或者采集的时候本身保留的不确定信息也可以帮助模型的训练。当然KD本身还有很多局限，比如当类别少的时候效果就不太显著，对于非分类问题也不适用。
 
-@周博磊
-
+> @周博磊
+>
 > 大模型通过传统的cross entropy loss，训练过程中其实是可以把训练数据里面类别之间的关联性信息学习出来。比如说在testing的时候，给张狗的图片，模型的output probability可能是狗0.9，猫0.09，卡车0.005，汽车0.005，图片更容易被错分到猫那一类。
 >
 > knowledge distillation的大致做法是把所有训练样本都再feeforward一遍训练好的大模型，那么原本图片样本的离散标定，就变为一个大模型预测出来的类别probability，这个probability更好地表征了类与类之间的相似性。
